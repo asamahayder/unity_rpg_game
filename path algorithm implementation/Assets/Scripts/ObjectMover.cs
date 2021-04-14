@@ -27,8 +27,11 @@ public class ObjectMover : MonoBehaviour
 
         if (currentPath.Count != 0)
         {
-            print(Vector3.Distance(currentPath[i].worldPosition, gameObject.transform.position));
-            if (Vector3.Distance(currentPath[i].worldPosition, gameObject.transform.position) <= radius)
+
+            Vector2 startPos = new Vector2(currentPath[i].worldPosition.x, currentPath[i].worldPosition.z);
+            Vector2 endPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
+
+            if (Vector2.Distance(startPos, endPos) <= radius)
             {
                 
                 if (i != currentPath.Count - 1)
@@ -39,7 +42,9 @@ public class ObjectMover : MonoBehaviour
                 
 
             }
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, currentPath[i].worldPosition, Time.deltaTime * speed);
+            Vector3 targetPosition = currentPath[i].worldPosition;
+            targetPosition.y = Terrain.activeTerrain.SampleHeight(currentPath[i].worldPosition);
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, Time.deltaTime * speed);
 
         }
 

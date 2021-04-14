@@ -19,6 +19,6 @@ public class WaypointLogic : MonoBehaviour
         if (dist <= distanceToDestroy) Destroy(gameObject);*/
 
         if (Physics.CheckSphere(transform.position, collisionCheckRadius, mask)) Destroy(gameObject);
-
+        
     }
 }
