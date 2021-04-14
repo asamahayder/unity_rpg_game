@@ -12,18 +12,53 @@ public class ObjectMover : MonoBehaviour
     float radius = 1f;
     public float speed;
     Animator animator;
+    Vector3 oldPosition;
+    Vector3 newPosition;
 
     
 
     private void Awake()
     {
-        animator = gameObject.GetComponent<Animator>();
+        animator = gameObject.transform.Find("Model").GetComponent<Animator>();
+        //animator = gameObject.GetComponent<Animator>();
     }
     // Update is called once per frame
+
+    private void Start()
+    {
+        Vector3 position = gameObject.transform.position;
+        float terrainY = Terrain.activeTerrain.SampleHeight(gameObject.transform.position);
+        position.y = terrainY;
+        gameObject.transform.position = position;
+
+
+        oldPosition = gameObject.transform.position;
+    }
+
     void Update()
     {
 
-        
+        //Looking for movement by comparing last frame's position with this frame's position.
+        //Using movement to control running animation state and rotation of character.
+        newPosition = gameObject.transform.position;
+
+        if(newPosition != oldPosition)
+        {
+            animator.SetBool("isMoving", true);
+            //Handling character rotation towards direction
+            Vector3 deltaVec = newPosition - oldPosition;
+            Quaternion rotation = Quaternion.LookRotation(deltaVec);
+            rotation.x = 0;
+            rotation.z = 0;
+
+            gameObject.transform.Find("Model").rotation = rotation;
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
+
+        oldPosition = newPosition;
 
 
         if (currentPath.Count != 0)
@@ -37,56 +72,19 @@ public class ObjectMover : MonoBehaviour
                 
                 if (i != currentPath.Count - 1)
                 {
-
-                    //Handling character rotation towards direction
-                    Vector3 deltaVec = currentPath[i].worldPosition - gameObject.transform.position;
-                    Quaternion rotation = Quaternion.LookRotation(deltaVec);
-                    rotation.x = 0;
-                    rotation.z = 0;
-                    gameObject.transform.rotation = rotation;
-
-                    //handling changing animation state
-                    animator.SetBool("isMoving", true);
-
                     //next node on path
                     i++;
                 }
-                else
-                {
-                    animator.SetBool("isMoving", false);
-                }
-
-                
 
             }
 
             float terrainY = Terrain.activeTerrain.SampleHeight(currentPath[i].worldPosition);
 
-            //Vector3 directionVector = startPos - endPos;
-            //directionVector.y = terrainY;
-
             Vector3 targetPosition = currentPath[i].worldPosition;
             targetPosition.y = terrainY;
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, Time.deltaTime * speed);
 
-
-
-            
-
-
-
-
-            /*float rotationX = Mathf.Atan2(Mathf.Sqrt(Mathf.Pow(directionVector.z, 2) + Mathf.Pow(directionVector.y, 2)), directionVector.x);
-            print("rotation: " + Mathf.Rad2Deg*rotationX);
-            Quaternion rotationVector = gameObject.transform.rotation;
-            rotationVector.y = rotationX;
-            gameObject.transform.rotation = rotationVector;
-            //gameObject.transform.forward = directionVector.normalized;
-            //gameObject.transform.rotation = Quaternion.LookRotation(targetPosition.normalized);*/
-
         }
-
-
     }
 
     public void updatePath(List<Node> newPath)

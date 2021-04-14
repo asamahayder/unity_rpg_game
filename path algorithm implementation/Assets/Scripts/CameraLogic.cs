@@ -18,9 +18,14 @@ public class CameraLogic : MonoBehaviour
     public float farZoomLimit = 2f;
     public float delta = .1f;
 
+    public float startX;
+    public float startY;
+    public float startZ;
+
 
     void Start()
     {
+        transform.position = new Vector3(startX, startY, startZ);
         _cameraOffset = transform.position - target.position;
         currentZoomLevel = startingZoom;
     }
@@ -69,7 +74,8 @@ public class CameraLogic : MonoBehaviour
 
 
         //Handling camera look-at player logic. Also adding some height so camera looks at head instead of feet.
-        transform.LookAt(target);
-        
+        transform.LookAt(target.transform.Find("Camera Lookat"));
+
+
     }
 }
