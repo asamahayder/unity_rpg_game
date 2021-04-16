@@ -15,7 +15,7 @@ public class ObjectMover : MonoBehaviour
     Vector3 oldPosition;
     Vector3 newPosition;
 
-    
+    private bool isAtEndOfPath = true;
 
     private void Awake()
     {
@@ -30,7 +30,6 @@ public class ObjectMover : MonoBehaviour
         float terrainY = Terrain.activeTerrain.SampleHeight(gameObject.transform.position);
         position.y = terrainY;
         gameObject.transform.position = position;
-
 
         oldPosition = gameObject.transform.position;
     }
@@ -77,6 +76,12 @@ public class ObjectMover : MonoBehaviour
                 }
 
             }
+            
+            if(i == currentPath.Count - 1)
+            {
+                //end of path
+                isAtEndOfPath = true;
+            }
 
             float terrainY = Terrain.activeTerrain.SampleHeight(currentPath[i].worldPosition);
 
@@ -89,9 +94,17 @@ public class ObjectMover : MonoBehaviour
 
     public void updatePath(List<Node> newPath)
     {
+        isAtEndOfPath = false;
         currentPath = newPath;
         i = 0;
     }
+
+    public bool getIsAtEndOfPath()
+    {
+        return isAtEndOfPath;
+    }
+
+    
 
     
 }

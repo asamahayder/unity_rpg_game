@@ -6,30 +6,52 @@ using System.Diagnostics;
 public class PathFinding : MonoBehaviour
 {
 
-    public Transform seeker, target;
+    public Transform seeker;
     public LayerMask groundMask;
 
     public GameObject waypoint;
     private GameObject currentWayPoint;
 
-    Grid grid;
+    private Grid grid;
+    public GameObject gridObject;
+
     ObjectMover mover;
+
+    //For roaming
+    public bool activateRoam = false;
+    private Vector3 startPosition;
+    public float roamingRadius = 10f;
+    private float z1,z2,x1,x2;
+    private bool hasWaited = false;
 
     private void Awake()
     {
-        grid = GetComponent<Grid>();
+        grid = gridObject.GetComponent<Grid>();
+
         mover = GetComponent<ObjectMover>();
+    }
+
+    private void Start()
+    {
+        startPosition = seeker.position;
+        z1 = startPosition.z - roamingRadius;
+        z2 = startPosition.z + roamingRadius;
+        x1 = startPosition.x - roamingRadius;
+        x2 = startPosition.x + roamingRadius;
+
+        if (activateRoam) StartCoroutine(roam());
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!activateRoam && Input.GetMouseButtonDown(0))
         {
             
             findPath(seeker.position, GetMouseClickWorldPosition());
 
         }
 
+        
     }
 
     private Vector3 GetMouseClickWorldPosition()
@@ -143,4 +165,42 @@ public class PathFinding : MonoBehaviour
 
         currentWayPoint = Instantiate(waypoint, waypointPosition, new Quaternion());
     }
+
+    IEnumerator roam()
+    {
+       
+        while (true)
+        {
+            
+            if (mover.getIsAtEndOfPath())
+            {
+                //return here?
+                if (!hasWaited)
+                {
+                    hasWaited = true;
+                    yield return new WaitForSeconds(2f);
+                }
+                else
+                {
+                    hasWaited = false;
+                    //Find a random target and pathfind to it
+                    Vector3 randomPositionWithinRoamArea = new Vector3(Random.Range(x1, x2), 0, Random.Range(z1, z2));
+
+                    Node targetNode = grid.nodeFromWorldPoint(randomPositionWithinRoamArea);
+
+                    //find path
+                    findPath(seeker.position, targetNode.worldPosition);
+                }
+                
+            }
+
+
+            if (!mover.getIsAtEndOfPath())
+            {
+                yield return null;
+            }
+
+        }
+    }
+
 }

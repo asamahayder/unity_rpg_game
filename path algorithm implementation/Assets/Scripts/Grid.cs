@@ -16,7 +16,7 @@ public class Grid : MonoBehaviour
     float nodeDiameter;
     int gridSizeX, gridSizeY;
 
-    public Transform player;
+    //public Transform player;
 
 
 
