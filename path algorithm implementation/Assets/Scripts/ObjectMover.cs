@@ -6,23 +6,25 @@ public class ObjectMover : MonoBehaviour
 {
 
     
-    public GameObject gameObject;
     List<Node> currentPath = new List<Node>();
     int i = 0;
     float radius = 1f;
     public float speed;
-    Animator animator;
+    
     Vector3 oldPosition;
     Vector3 newPosition;
+
+    [SerializeField] private GameObject model;
+    private Transform modelTransform;
+    private Animator animator;
 
     private bool isAtEndOfPath = true;
 
     private void Awake()
     {
-        animator = gameObject.transform.Find("Model").GetComponent<Animator>();
-        //animator = gameObject.GetComponent<Animator>();
+        modelTransform = model.transform;
+        animator = model.GetComponent<Animator>();
     }
-    // Update is called once per frame
 
     private void Start()
     {
@@ -50,7 +52,8 @@ public class ObjectMover : MonoBehaviour
             rotation.x = 0;
             rotation.z = 0;
 
-            gameObject.transform.Find("Model").rotation = rotation;
+            modelTransform.rotation = rotation;
+            //gameObject.transform.Find("Model").rotation = rotation;
         }
         else
         {
@@ -60,7 +63,7 @@ public class ObjectMover : MonoBehaviour
         oldPosition = newPosition;
 
 
-        if (currentPath.Count != 0)
+        if (currentPath != null && currentPath.Count != 0)
         {
 
             Vector2 startPos = new Vector2(currentPath[i].worldPosition.x, currentPath[i].worldPosition.z);
