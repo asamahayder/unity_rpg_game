@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UI_Scripts;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -14,11 +15,7 @@ public class Character : MonoBehaviour
     {
         inventory = new Inventory();
         itemDatabase = new ItemDatabase();
-        inventory.addItem(itemDatabase.getItem(0));
-        inventory.addItem(itemDatabase.getItem(1));
-        inventory.addItem(itemDatabase.getItem(0));
-        inventory.addItem(itemDatabase.getItem(0));
-        inventory.addItem(itemDatabase.getItem(0));
-        uiInventory.setInventory(inventory);
+        inventory.setItemList(itemDatabase.getDatabase());
+        uiInventory.SetInventory(inventory);
     }
 }

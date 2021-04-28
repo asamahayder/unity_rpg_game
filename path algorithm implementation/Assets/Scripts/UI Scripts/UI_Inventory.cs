@@ -1,41 +1,46 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UI_Inventory : MonoBehaviour
+namespace UI_Scripts
 {
-    private Inventory inventory;
-    private Transform inventorySlotContainer;
-    private Transform inventorySlotTemplate;
-
-    private void Awake()
+    public class UI_Inventory : MonoBehaviour
     {
-        inventorySlotContainer = transform.Find("Inventory_Slot_Container");
-        inventorySlotTemplate = inventorySlotContainer.Find("Inventory_Slot_Template");
-    }
+        private Inventory _inventory;
+        private Transform _inventorySlotContainer;
+        private Transform _inventorySlotTemplate;
 
-    public void setInventory(Inventory inventory)
-    {
-        this.inventory = inventory;
-        refreshInventory();
-    }
+        public GameObject itemSprite;
 
-    private void refreshInventory()
-    {
-        int x = 0, y = 0;
-        float itemSlotCellSizeWidth = 95f;
-        float itemSlotCellSizeHeight = 70f;
-        foreach (Item item in inventory.getItemList())
+        private void Awake()
         {
-            RectTransform itemSlotRectTransform = Instantiate(inventorySlotTemplate, inventorySlotContainer).GetComponent<RectTransform>();
-            itemSlotRectTransform.gameObject.SetActive(true);
-            itemSlotRectTransform.anchoredPosition = new Vector3(x * itemSlotCellSizeWidth, y * itemSlotCellSizeHeight);
-            x++;
-            if (x == 4)
+            _inventorySlotContainer = transform.Find("Inventory_Slot_Container");
+            _inventorySlotTemplate = _inventorySlotContainer.Find("Inventory_Slot_Template");
+        }
+
+        public void SetInventory(Inventory inventory)
+        {
+            this._inventory = inventory;
+            RefreshInventory();
+        }
+
+        private void RefreshInventory()
+        {
+            int x = 0, y = 0;
+            float itemSlotCellSizeWidth = 95f;
+            float itemSlotCellSizeHeight = 70f;
+            foreach (Item item in _inventory.getItemList())
             {
-                x = 0;
-                y--;
+                Image image = itemSprite.GetComponent<Image>();
+                image.sprite = item.ItemIcon;
+                RectTransform itemSlotRectTransform = Instantiate(_inventorySlotTemplate, _inventorySlotContainer).GetComponent<RectTransform>();
+                itemSlotRectTransform.gameObject.SetActive(true);
+                itemSlotRectTransform.anchoredPosition = new Vector3(x * itemSlotCellSizeWidth, y * itemSlotCellSizeHeight);
+                x++;
+                if (x == 4)
+                {
+                    x = 0;
+                    y--;
+                }
             }
         }
     }

@@ -1,35 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Item
+namespace UI_Scripts
 {
-    public enum itenCategory
+    public class Item
     {
-        equipment, 
-        consumable, 
-        quest, 
-        currency, 
-        resource, 
-        miscellaneous,
-    }
-    
-    public ulong itemID;
-    public ulong itemAmount;
-    public string itemName;
-    public string itemDescription;
-    public ulong itemValue;
-    public itenCategory itemType;
-    public Sprite itemIcon;
+        public enum ItemCategory
+        {
+            Equipment, 
+            Consumable, 
+            Quest, 
+            Currency, 
+            Resource, 
+            Miscellaneous,
+        }
 
-    public Item(ulong itemID, ulong itemAmount, string itemName, string itemDescription, ulong itemValue, itenCategory itemType, Sprite itemIcon)
-    {
-        this.itemID = itemID;
-        this.itemAmount = itemAmount;
-        this.itemName = itemName;
-        this.itemDescription = itemDescription;
-        this.itemValue = itemValue;
-        this.itemType = itemType;
-        this.itemIcon = itemIcon;
+        public Item(ulong itemID, ulong itemAmount, string itemName, string itemDescription, ulong itemValue, ItemCategory itemType, Sprite itemIcon)
+        {
+            this.ItemID = itemID;
+            this.ItemAmount = itemAmount;
+            this.ItemName = itemName;
+            this.ItemDescription = itemDescription;
+            this.ItemValue = itemValue;
+            this.ItemType = itemType;
+            this.ItemIcon = itemIcon;
+        }
+
+        public ulong ItemID { get; set; }
+
+        public ulong ItemAmount { get; set; }
+
+        public string ItemName { get; set; }
+
+        public string ItemDescription { get; set; }
+
+        public ulong ItemValue { get; set; }
+
+        public ItemCategory ItemType { get; set; }
+
+        public Sprite ItemIcon { get; set; }
     }
 }

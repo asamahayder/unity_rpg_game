@@ -1,24 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using UI_Scripts;
 using UnityEngine;
 
 public class Inventory
 {
     
-    private List<Item> itemList;
+    private List<Item> _itemList;
 
     public Inventory()
     {
-        itemList = new List<Item>();
+        _itemList = new List<Item>();
     }
 
     public void addItem(Item item)
     {
-        itemList.Add(item);
+        _itemList.Add(item);
     }
 
     public List<Item> getItemList()
     {
-        return itemList;
+        return _itemList;
+    }
+
+    public void setItemList(List<Item> itemList)
+    {
+        this._itemList = itemList;
     }
 }

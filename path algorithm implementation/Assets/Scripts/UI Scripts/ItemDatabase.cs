@@ -1,32 +1,67 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemDatabase
+namespace UI_Scripts
 {
-    public List<Item> databaseItems;
-
-    public ItemDatabase()
+    public class ItemDatabase
     {
-        buildDatabase();
-    }
+        private List<Item> _databaseItems;
 
-    void buildDatabase()
-    {
-        databaseItems = new List<Item>()
+        public ItemDatabase()
         {
-            new ItemEquipment(1, 1, "Sword","A sword", 50, Item.itenCategory.equipment, null,null, null),
-            new Item(0,100, "Coin","A coin", 1, Item.itenCategory.currency, null)
-        };
-    }
+            BuildDatabase();
+        }
 
-    public Item getItem(ulong id)
-    {
-        return databaseItems.Find(item => item.itemID == id);
-    }
+        void BuildDatabase()
+        {
+            _databaseItems = new List<Item>()
+            {
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(1, 1, "Sword","A sword", 50, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/ax2"),null, null),
+                new ItemEquipment(2,1, "Axe","Axe", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/bow2"),null,null),
+                new ItemEquipment(3,1, "Bow","Bow", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/sword2"),null,null),
+                new ItemEquipment(2,1, "Staff","Staff", 1, Item.ItemCategory.Equipment, Resources.Load<Sprite>("Textures/staff2"),null,null)
+
+
+            };
+        }
+
+        public Item getItem(ulong id)
+        {
+            return _databaseItems.Find(item => item.ItemID == id);
+        }
     
-    public Item getItem(string name)
-    {
-        return databaseItems.Find(item => item.itemName == name);
+        public Item getItem(string name)
+        {
+            return _databaseItems.Find(item => item.ItemName == name);
+        }
+
+        public List<Item> getDatabase()
+        {
+            return _databaseItems;
+        }
     }
 }
