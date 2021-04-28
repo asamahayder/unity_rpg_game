@@ -6,7 +6,7 @@ using System.Diagnostics;
 public class PathFinding : MonoBehaviour
 {
 
-    public Transform seeker;
+    private Transform actorTransform;  //the current position of the NPC/Player
     public LayerMask groundMask;
 
     public GameObject waypoint;
@@ -17,8 +17,9 @@ public class PathFinding : MonoBehaviour
 
     ObjectMover mover;
 
-    //For roaming
-    public bool activateRoam = false;
+    //For roaming and npc
+    public bool isNPC = false; //Maybe let this be controlles by NPC behavior instead of public?
+    public bool activateRoam = false; //this only controlls the initial roam behavior. //Maybe move this to NPCBehavior?
     private Vector3 startPosition;
     public float roamingRadius = 10f;
     private float z1,z2,x1,x2;
@@ -29,51 +30,33 @@ public class PathFinding : MonoBehaviour
         grid = gridObject.GetComponent<Grid>();
 
         mover = GetComponent<ObjectMover>();
+
+
     }
 
     private void Start()
     {
-        startPosition = seeker.position;
+        actorTransform = GetComponent<Transform>();
+
+        startPosition = actorTransform.position;
         z1 = startPosition.z - roamingRadius;
         z2 = startPosition.z + roamingRadius;
         x1 = startPosition.x - roamingRadius;
         x2 = startPosition.x + roamingRadius;
 
-        if (activateRoam) StartCoroutine(roam());
+        if (activateRoam && isNPC) StartCoroutine(roam()); //roaming only possible for npc's
     }
 
     private void Update()
     {
-        if (!activateRoam && Input.GetMouseButtonDown(0))
-        {
-            
-            findPath(seeker.position, GetMouseClickWorldPosition());
-
-        }
-
         
-    }
-
-    private Vector3 GetMouseClickWorldPosition()
-    {
-        Vector3 clickPosition = -1000 * Vector3.one;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1000f, groundMask))
-        {
-            clickPosition = hit.point;
-        }
-
-        return clickPosition;
 
     }
 
-
-    void findPath(Vector3 startPosition, Vector3 targetPosition)
+    
+    public void findPath(Vector3 targetPosition, bool toInteractableObject)
     {
-        
+        Vector3 startPosition = actorTransform.position;
 
         Stopwatch sw = new Stopwatch();
         sw.Start();
@@ -96,12 +79,23 @@ public class PathFinding : MonoBehaviour
             if (node == targetNode) //we have found destination
             {
                 sw.Stop();
-                print("Path found: " + sw.ElapsedMilliseconds + " ms");
+                //print("Path found: " + sw.ElapsedMilliseconds + " ms");
 
-                if (currentWayPoint != null) Destroy(currentWayPoint);
-                instantiateWaypoint(targetPosition);
 
-                retracePath(startNode, targetNode);
+                if (!isNPC && !toInteractableObject) 
+                {
+                    if (currentWayPoint != null) Destroy(currentWayPoint);
+                    instantiateWaypoint(targetPosition);
+                }
+
+                List<Node> path = retracePath(startNode, targetNode);
+
+
+                //If the path is going to interactable object, we stop at the node just before it.
+                if (toInteractableObject) path.RemoveAt(path.Count - 1);
+                
+                grid.path = path;
+                mover.updatePath(path);
                 return;
             }
 
@@ -127,7 +121,7 @@ public class PathFinding : MonoBehaviour
         }
     }
 
-    void retracePath(Node startNode, Node endNode)
+    List<Node> retracePath(Node startNode, Node endNode)
     {
         List<Node> path = new List<Node>();
         Node currentNode = endNode;
@@ -139,9 +133,7 @@ public class PathFinding : MonoBehaviour
         }
         path.Reverse();
 
-        grid.path = path;
-        mover.updatePath(path);
-
+        return path;
     }
 
     
@@ -174,7 +166,6 @@ public class PathFinding : MonoBehaviour
             
             if (mover.getIsAtEndOfPath())
             {
-                //return here?
                 if (!hasWaited)
                 {
                     hasWaited = true;
@@ -189,11 +180,11 @@ public class PathFinding : MonoBehaviour
                     Node targetNode = grid.nodeFromWorldPoint(randomPositionWithinRoamArea);
 
                     //find path
-                    findPath(seeker.position, targetNode.worldPosition);
+                    findPath(targetNode.worldPosition, false);
                 }
                 
             }
-
+            
 
             if (!mover.getIsAtEndOfPath())
             {
@@ -201,6 +192,16 @@ public class PathFinding : MonoBehaviour
             }
 
         }
+    }
+
+    public void startRoam()
+    {
+        StartCoroutine(roam());
+    }
+
+    public void stopRoam()
+    {
+        StopCoroutine(roam());
     }
 
 }

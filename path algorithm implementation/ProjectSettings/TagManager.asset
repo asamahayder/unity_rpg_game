@@ -14,7 +14,7 @@ TagManager:
   - Unwalkable
   - Ground
   - Player
-  - 
+  - Interactable
   - 
   - 
   - 
@@ -40,4 +40,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: TextLayer
+    uniqueID: 2156625149
     locked: 0
