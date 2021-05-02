@@ -48,12 +48,7 @@ public class ObjectMover : MonoBehaviour
             animator.SetBool("isMoving", true);
             //Handling character rotation towards direction
             Vector3 deltaVec = newPosition - oldPosition;
-            Quaternion rotation = Quaternion.LookRotation(deltaVec);
-            rotation.x = 0;
-            rotation.z = 0;
-
-            modelTransform.rotation = rotation;
-            //gameObject.transform.Find("Model").rotation = rotation;
+            rotateTowards(deltaVec);
         }
         else
         {
@@ -107,7 +102,56 @@ public class ObjectMover : MonoBehaviour
         return isAtEndOfPath;
     }
 
-    
+    public void clearPath()
+    {
+        isAtEndOfPath = true;
+        currentPath = null;
+        i = 0;
+    }
 
-    
+
+    /// <summary>
+    /// Instantly rotates the object towards a direction. For a smooth rotation, use turnTowardsTarget instead.
+    /// </summary>
+    /// <param name="direction"></param>
+    public void rotateTowards(Vector3 direction)
+    {
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        rotation.x = 0;
+        rotation.z = 0;
+
+        modelTransform.rotation = rotation;
+    }
+
+
+    /// <summary>
+    /// Smoothly turns the object towards a target transform using the speed paremeter. For instant rotation, use rotateTowards instead.
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="speed"></param>
+    public void turnTowardsTarget(Transform target, float speed)
+    {
+        //the following code is taken from: https://docs.unity3d.com/ScriptReference/Vector3.RotateTowards.html
+
+        // Determine which direction to rotate towards
+        Vector3 targetDirection = target.position - modelTransform.position;
+
+        // The step size is equal to speed times frame time.
+        float singleStep = speed * Time.deltaTime;
+
+        // Rotate the forward vector towards the target direction by one step
+        Vector3 newDirection = Vector3.RotateTowards(modelTransform.forward, targetDirection, singleStep, 0.0f);
+
+
+        // Calculate a rotation a step closer to the target and applies rotation to this object
+        Quaternion lookTowards = Quaternion.LookRotation(newDirection);
+        lookTowards.x = 0;
+        lookTowards.z = 0;
+        modelTransform.rotation = lookTowards;
+
+    }
+
+
+
+
 }

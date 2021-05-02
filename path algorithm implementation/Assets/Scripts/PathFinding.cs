@@ -20,10 +20,12 @@ public class PathFinding : MonoBehaviour
     //For roaming and npc
     public bool isNPC = false; //Maybe let this be controlles by NPC behavior instead of public?
     public bool activateRoam = false; //this only controlls the initial roam behavior. //Maybe move this to NPCBehavior?
-    private Vector3 startPosition;
+    public Vector3 startPosition;
     public float roamingRadius = 10f;
-    private float z1,z2,x1,x2;
+    public float z1,z2,x1,x2;
     private bool hasWaited = false;
+
+    IEnumerator roamRutine;
 
     private void Awake()
     {
@@ -36,6 +38,8 @@ public class PathFinding : MonoBehaviour
 
     private void Start()
     {
+        roamRutine = roam();
+
         actorTransform = GetComponent<Transform>();
 
         startPosition = actorTransform.position;
@@ -44,7 +48,7 @@ public class PathFinding : MonoBehaviour
         x1 = startPosition.x - roamingRadius;
         x2 = startPosition.x + roamingRadius;
 
-        if (activateRoam && isNPC) StartCoroutine(roam()); //roaming only possible for npc's
+        if (activateRoam && isNPC) StartCoroutine(roamRutine); //roaming only possible for npc's
     }
 
     private void Update()
@@ -82,11 +86,12 @@ public class PathFinding : MonoBehaviour
                 //print("Path found: " + sw.ElapsedMilliseconds + " ms");
 
 
+                if (currentWayPoint != null) Destroy(currentWayPoint);
                 if (!isNPC && !toInteractableObject) 
                 {
-                    if (currentWayPoint != null) Destroy(currentWayPoint);
                     instantiateWaypoint(targetPosition);
                 }
+                
 
                 List<Node> path = retracePath(startNode, targetNode);
 
@@ -196,12 +201,12 @@ public class PathFinding : MonoBehaviour
 
     public void startRoam()
     {
-        StartCoroutine(roam());
+        StartCoroutine(roamRutine);
     }
 
     public void stopRoam()
     {
-        StopCoroutine(roam());
+        StopCoroutine(roamRutine);
     }
 
 }

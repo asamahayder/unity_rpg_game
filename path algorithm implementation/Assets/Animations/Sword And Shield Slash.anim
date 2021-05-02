@@ -49886,7 +49886,7 @@ AnimationClip:
   - time: 0.53333336
     functionName: onAttack
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: a24bf532026260b49a1bcbf30daf10ff, type: 3}
+    objectReferenceParameter: {fileID: 11500000, guid: 1062ca9639b01a54a96c301a6c33eb5f, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

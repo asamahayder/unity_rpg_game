@@ -11,17 +11,17 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     protected float outlineWidth = 3f;
     protected Outline.Mode outlineMode = 0; //outline all
     protected bool isMouseOver = false;
-    private GameObject floatingTextCanvas;
-    //private Text text;
-    
 
-    //private bool isMouseOver = false;
+
+
+    protected virtual void Awake()
+    {
+        
+    }
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        floatingTextCanvas = GameObject.Find("Floating UI");
-
         outline = GetComponent<Outline>();
         outline.OutlineColor = outlineColor;
         outline.OutlineWidth = outlineWidth;
@@ -31,7 +31,7 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         
     }
@@ -51,7 +51,6 @@ public abstract class Interactable : MonoBehaviour, IInteractable
         isMouseOver = true;
         outline.enabled = true;
         onMouseOver(); //we do this as a workaround, because child classes can not directly override members of an interface. 
-
 
     }
 

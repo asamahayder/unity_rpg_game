@@ -11,13 +11,19 @@ public class NPCbehavior : Actor
     {
         base.onInteract();
         print(message);
-
+        onEndInteraction();
     }
 
     protected override void onMouseOver()
     {
         base.onMouseOver();
-        Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
+        
+    }
+
+    protected override void onEndInteraction()
+    {
+        base.onEndInteraction();
+
     }
 
     protected override void LateUpdate()

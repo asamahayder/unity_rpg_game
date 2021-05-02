@@ -9,47 +9,58 @@ public class EnemyBehavior : Actor
     CharacterCombat characterCombat;
     private bool isInCombat = false;
 
-    [SerializeField] private float health = 100f;
+    [SerializeField] private float enemyHP = 100f;
     [SerializeField] private Texture2D cursorImage;
 
     public GameObject damageTextPrefab;
     private GameObject damageTextPositionObject;
-    private float characterHP = 100f;
 
-   
-
+    public float attackRange = 3f;
+    
 
     //TODO: the characterHP logic is copied inside this and CharacterCombat. Implement a better OOP way than this.
-    public float CharacterHP
+    public float EnemyHP
     {
         set
         {
             GameObject damageText = Instantiate(damageTextPrefab, damageTextPositionObject.transform);
-            float difference = characterHP - value;
+            float difference = enemyHP - value;
             damageText.transform.GetChild(0).GetComponent<TextMeshPro>().SetText("-" + difference);
-            characterHP = value;
-            print("Enemy Helath: " + CharacterHP);
+            enemyHP = value;
+            print("Enemy Helath: " + EnemyHP);
         }
         get
         {
-            return characterHP;
+            return enemyHP;
         }
     }
+
+    public bool IsinCombat
+    {
+        set
+        {
+            isInCombat = value;
+            animator.SetBool("isInCombat", value);
+        }
+        get
+        {
+            return isInCombat;
+        }
+    }
+
 
     protected override void onInteract()
     {
         base.onInteract();
-        isInCombat = true; //important that this is before startCoroutine
-        characterCombat.isInCombat = true;
-        characterCombat.TargetEnemy = this;
-        StartCoroutine(activateCombat());
+        IsinCombat = true; //important that this is before startCoroutine
+        if (characterCombat.TargetEnemy == null) characterCombat.TargetEnemy = this;
+        else print("You are already fighting an enemy!");
       
     }
 
     protected override void onMouseOver()
     {
         base.onMouseOver();
-        //Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
 
     }
 
@@ -58,8 +69,8 @@ public class EnemyBehavior : Actor
         damageTextPositionObject = gameObject.transform.Find("DamageTextEmitPosition").gameObject;
         outlineColor = Color.red; //important that this is before base.start
         base.Start();
-        print("HEEEEEEEEEEELOOOOOOOOOOOOO i am running!");
-        characterCombat = GameObject.Find("Character").GetComponent<CharacterCombat>();
+        characterCombat = playerCharacter.GetComponent<CharacterCombat>();
+        //characterCombat = GameObject.Find("Character").GetComponent<CharacterCombat>();
     }
 
     protected override void LateUpdate()
@@ -68,37 +79,67 @@ public class EnemyBehavior : Actor
         if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
     }
 
-    private void Update()
+    protected override void Update()
     {
-        if(characterHP <= 0)
+        base.Update();
+        if(enemyHP <= 0)
         {
-            onDie();
+            animator.SetBool("isDead", true);
         }
+
+
+        if (isInCombat && Vector3.Distance(playerCharacter.transform.position, transform.position) > attackRange)
+        {
+            pathfinder.findPath(playerCharacter.transform.position, true);
+            
+        }
+
+
+        Rect followArea = new Rect(pathfinder.x1, pathfinder.z1, 2 * pathfinder.roamingRadius, 2 * pathfinder.roamingRadius);
+        Vector2 position2D = new Vector2(transform.position.x, transform.position.z);
+        //if i am outside my roaming zone, return to center of roaming zone
+        if (IsinCombat && !followArea.Contains(position2D))
+        {
+            onEndInteraction();
+            pathfinder.findPath(pathfinder.startPosition, false);
+        }
+
+
     }
 
-    void onDie()
+
+    //In an enemy's case, this is called when combat has been initiated, but then canceled when player runs away.
+    protected override void onEndInteraction()
     {
-        StopCoroutine(activateCombat());
+        base.onEndInteraction();
+        IsinCombat = false;
+        characterCombat.TargetEnemy = null;
+        
+    }
+
+    public void onDie()
+    {
         Destroy(gameObject);
     }
+    
+    
 
-
-    IEnumerator activateCombat()
+    public void attack()
     {
-        while (true)
+        if (isInCombat && !(enemyHP <= 0) && !(characterCombat.CharacterHP <= 0f) && Vector3.Distance(playerCharacter.transform.position, transform.position) <= 3)
         {
-
-            if (isInCombat && !(characterHP <= 0) && !(characterCombat.CharacterHP <= 0f))
-            {
-                characterCombat.CharacterHP -= 10f;
-                yield return new WaitForSeconds(2);
-            }
-            else
-            {
-                isInCombat = false;
-                yield break;
-            }
+            characterCombat.CharacterHP -= 10f;
+            
         }
+        else
+        {
+            IsinCombat = false;
+        }
+    }
+
+    public bool isInsideRoamingZone()
+    {
+        return true;
     }
 
 }
