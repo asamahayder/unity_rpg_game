@@ -7,20 +7,23 @@ public class InputHandler : MonoBehaviour
 
     PathFinding pathfinder;
     Outline outline;
+    ObjectMover objectMover;
 
-    
+
     private bool movingTowardsTarget = false;
 
     public float minimumDistanceToTarget = 5;
 
     private GameObject targetObject;
     private GameObject interactableObject;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         pathfinder = GetComponent<PathFinding>();
         outline = GetComponent<Outline>();
+        objectMover = GetComponent<ObjectMover>();
         outline.OutlineMode = Outline.Mode.SilhouetteOnly;
         outline.OutlineColor = Color.gray;
         
@@ -72,7 +75,12 @@ public class InputHandler : MonoBehaviour
             movingTowardsTarget = false;
             IInteractable interactableObject = targetObject.GetComponent<IInteractable>();
             interactableObject.onInteract();
+        }
 
+        //we have reached the target
+        if(targetObject != null && !movingTowardsTarget)
+        {
+            objectMover.turnTowardsTarget(targetObject.transform, 10f);
         }
 
         //Calculate path every frame in case the target is an NPC that is moving

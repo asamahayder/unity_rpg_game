@@ -19,9 +19,9 @@ public class CharacterCombat : MonoBehaviour
     {
         set
         {
-            if(value != null)
+            targetEnemy = value;
+            if (value != null)
             {
-                targetEnemy = value;
                 isInCombat = true;
             }
             else
@@ -84,7 +84,7 @@ public class CharacterCombat : MonoBehaviour
             print("character is DEAD!");
         }
 
-        if(targetEnemy != null && targetEnemy.CharacterHP <= 0)
+        if(targetEnemy != null && targetEnemy.EnemyHP <= 0)
         {
             targetEnemy = null;
             isInCombat = false;
@@ -99,7 +99,7 @@ public class CharacterCombat : MonoBehaviour
     {
         if (targetEnemy != null)
         {
-            if(!(targetEnemy.CharacterHP <= 0)) targetEnemy.CharacterHP -= 15;
+            if(!(targetEnemy.EnemyHP <= 0)) targetEnemy.EnemyHP -= 15;
             else
             {
                 
