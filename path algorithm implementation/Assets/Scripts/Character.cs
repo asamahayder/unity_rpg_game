@@ -1,21 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
-using UI_Scripts;
+using ScriptableObjects.Inventory.Scripts;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    
+    public InventoryObject playerInventory;
 
-    [SerializeField] private UI_Inventory uiInventory;
-
-    private Inventory inventory;
-    private  ItemDatabase itemDatabase;
-
-    void Awake()
+    private void OnTriggerEnter(Collider other)
     {
-        inventory = new Inventory();
-        itemDatabase = new ItemDatabase();
-        inventory.setItemList(itemDatabase.getDatabase());
-        uiInventory.SetInventory(inventory);
+        var item = other.GetComponent<Item>();
+        if (item)
+        {
+            playerInventory.addItem(item.itemObject,1);
+            Destroy(other.gameObject);
+        }
+    }
+    // FOR TESTING, DELETES INVENTORY ITEMS ATM
+    private void OnApplicationQuit()
+    {
+        playerInventory.inventoryItemList.Clear();
     }
 }
