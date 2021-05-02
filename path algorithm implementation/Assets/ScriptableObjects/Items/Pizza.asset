@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 112976be4ba69cf808a5d5865425b464, type: 3}
+  m_Name: Pizza
+  m_EditorClassIdentifier: 
+  itemID: 2
+  itemPrefab: {fileID: 5422529098466840124, guid: 7e2f746eeef9dbff990da9e628867f5f, type: 3}
+  itemType: 1
+  itemName: Pizza
+  itemDescription: Delicious pizza
+  itemValue: 100
+  itemSprite: {fileID: 21300000, guid: 977dcfaff7e1e6782aa97845f611a7bf, type: 3}
+  consumableType: 0
+  consumableRestoreAmount: 20
