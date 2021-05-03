@@ -1,28 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using ScriptableObjects.Inventory.Scripts;
+using ScriptableObjects.Items.Scripts;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    
-    public InventoryObject playerInventory;
-
-    
-
+    public InventoryObject playerInventoryObject;
 
     private void OnTriggerEnter(Collider other)
     {
-        var item = other.GetComponent<Item>();
-        if (item)
+        var groundItem = other.GetComponent<GroundItem>();
+        //Debug.Log(item);
+        Debug.Log(groundItem.itemObject.itemName);
+        if (groundItem)
         {
-            playerInventory.addItem(item.itemObject,1);
-            Destroy(other.gameObject);
+            if (playerInventoryObject.addItem(groundItem.itemObject, groundItem.itemObject.itemAmount))
+            {
+                Destroy(other.gameObject);
+            }
         }
     }
-    // FOR TESTING, DELETES INVENTORY ITEMS ATM
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("SPACE PRESSED");
+            playerInventoryObject.SaveDatabase();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            Debug.Log("ENTER PRESSED");
+            playerInventoryObject.LoadDatabase();
+        }
+    }
+    
     private void OnApplicationQuit()
     {
-        playerInventory.inventoryItemList.Clear();
+        playerInventoryObject.Inventory.inventoryItemList.Clear();
     }
 }
