@@ -97,7 +97,7 @@ public class PathFinding : MonoBehaviour
 
 
                 //If the path is going to interactable object, we stop at the node just before it.
-                if (toInteractableObject) path.RemoveAt(path.Count - 1);
+                if (toInteractableObject && path.Count >= 2) path.RemoveAt(path.Count - 1);
                 
                 grid.path = path;
                 mover.updatePath(path);

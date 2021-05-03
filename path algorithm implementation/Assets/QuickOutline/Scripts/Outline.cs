@@ -82,8 +82,21 @@ public class Outline : MonoBehaviour {
 
   void Awake() {
 
-    // Cache renderers
-    renderers = GetComponentsInChildren<Renderer>();
+        
+    // Cache renderers and remove text to avoid giving wierd outline.
+    Renderer[] allRenderers = GetComponentsInChildren<Renderer>();
+        List<Renderer> allRenderersAsList = new List<Renderer>(allRenderers);
+        List<Renderer> viableRenderersAsList = new List<Renderer>(allRenderers); 
+    foreach(var renderer in allRenderersAsList)
+    {
+        if (renderer.material.shader.name.Contains("Text"))
+        {
+            viableRenderersAsList.Remove(renderer);
+        }
+    }
+
+    renderers = viableRenderersAsList.ToArray();
+        
 
     // Instantiate outline materials
     outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
@@ -101,6 +114,9 @@ public class Outline : MonoBehaviour {
 
   void OnEnable() {
     foreach (var renderer in renderers) {
+
+            
+      
 
       // Append outline shaders
       var materials = renderer.sharedMaterials.ToList();

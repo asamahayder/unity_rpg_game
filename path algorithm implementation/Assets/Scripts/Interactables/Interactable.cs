@@ -11,6 +11,7 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     protected float outlineWidth = 3f;
     protected Outline.Mode outlineMode = 0; //outline all
     protected bool isMouseOver = false;
+    protected GameObject infoUI;
 
 
 
@@ -22,6 +23,8 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     protected virtual void Start()
     {
+        setupInfoUI();
+        infoUI.SetActive(false);
         outline = GetComponent<Outline>();
         outline.OutlineColor = outlineColor;
         outline.OutlineWidth = outlineWidth;
@@ -40,8 +43,9 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     {
         if (isMouseOver)
         {
-            //display text
+            showUI();
         }
+        
         
     }
 
@@ -50,6 +54,7 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     {
         isMouseOver = true;
         outline.enabled = true;
+        
         onMouseOver(); //we do this as a workaround, because child classes can not directly override members of an interface. 
 
     }
@@ -61,6 +66,7 @@ public abstract class Interactable : MonoBehaviour, IInteractable
             yield return new WaitForEndOfFrame();
             outline.enabled = false;
             isMouseOver = false;
+            hideUI();
         }
 
     }
@@ -73,11 +79,22 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     protected abstract void onInteract();
     protected abstract void onMouseOver();
 
-    protected virtual void displayText()
+    protected virtual void showUI()
     {
+        infoUI.SetActive(true);
+    }
 
+    protected virtual void hideUI()
+    {
+        infoUI.SetActive(false);
+    }
 
+    protected virtual void setupInfoUI()
+    {
+        infoUI = gameObject.transform.Find("GeneralInfo").gameObject;
+        infoUI.transform.Find("NameText").GetComponent<TMPro.TextMeshProUGUI>().SetText(name);
 
+        
 
     }
 

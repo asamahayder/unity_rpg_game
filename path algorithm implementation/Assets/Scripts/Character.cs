@@ -8,6 +8,9 @@ public class Character : MonoBehaviour
     
     public InventoryObject playerInventory;
 
+    
+
+
     private void OnTriggerEnter(Collider other)
     {
         var item = other.GetComponent<Item>();
