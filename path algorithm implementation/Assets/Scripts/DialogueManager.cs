@@ -15,6 +15,8 @@ public class DialogueManager : MonoBehaviour
 
     private Queue<string> sentences;
 
+    private GameObject currentNPC;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,13 +33,14 @@ public class DialogueManager : MonoBehaviour
         
     }
 
-    public void startDialogue(Dialogue dialogue, string name)
+    public void startDialogue(Dialogue dialogue, GameObject gameObject)
     {
 
-        dialogueBoxAnimator.SetBool("isActive", true);
+        currentNPC = gameObject;
 
-        print("hey there my man");
-        Debug.Log("starting conversion with: " + name);
+        string name = gameObject.name;
+
+        dialogueBoxAnimator.SetBool("isActive", true);
 
         nameText.text = name;
 
@@ -77,7 +80,18 @@ public class DialogueManager : MonoBehaviour
 
     public void endDialogue()
     {
+        if (!dialogueBoxAnimator.GetBool("isActive"))
+        {//skip if already not opened
+            return;
+        }
+            
+        print("end dialogue");
         dialogueBoxAnimator.SetBool("isActive", false);
-        print("conversation has ended!");
+
+        if(currentNPC != null)
+        {
+            currentNPC.GetComponent<NPCbehavior>().endInteraction();
+        }
+        
     }
 }

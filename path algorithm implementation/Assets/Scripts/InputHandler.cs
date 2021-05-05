@@ -19,6 +19,8 @@ public class InputHandler : MonoBehaviour
     private GameObject targetObject;
     private GameObject interactableObject;
 
+    private DialogueManager dialogueManager;
+
     GraphicRaycaster raycaster;
 
 
@@ -31,13 +33,14 @@ public class InputHandler : MonoBehaviour
         outline.OutlineMode = Outline.Mode.SilhouetteOnly;
         outline.OutlineColor = Color.gray;
         raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
+
+        dialogueManager = GameObject.Find("DialogueManager").gameObject.GetComponent<DialogueManager>();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-
         interactableObject = GetInterActableObject(); //we get every frame because we need to check if mouse is over an interactable object
 
         if(interactableObject != null && interactableObject.TryGetComponent(out IInteractable thing)) //the TryGetComponent is used to check if the interactable has implemented the nessesary functions for interactions.
@@ -54,6 +57,7 @@ public class InputHandler : MonoBehaviour
         {
             if(interactableObject == null) //Mouse on ground
             {
+                dialogueManager.endDialogue();
                 pathfinder.findPath(GetMouseClickWorldPosition(), false);
                 movingTowardsTarget = false;
                 targetObject = null;

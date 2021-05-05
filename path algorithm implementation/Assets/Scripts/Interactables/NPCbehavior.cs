@@ -5,7 +5,6 @@ using UnityEngine;
 public class NPCbehavior : Actor
 {
 
-    public string message;
     [SerializeField] private Texture2D cursorImage;
 
     DialogueTrigger dialogueTrigger;
@@ -17,14 +16,16 @@ public class NPCbehavior : Actor
         dialogueTrigger = GetComponent<DialogueTrigger>();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        print(pathfinder.numberOfRoutinesRunning);
+    }
+
     protected override void onInteract()
     {
         base.onInteract();
-        print(message);
-
         dialogueTrigger.triggerDialogue();
-
-        onEndInteraction();
     }
 
     protected override void onMouseOver()
@@ -36,7 +37,11 @@ public class NPCbehavior : Actor
     protected override void onEndInteraction()
     {
         base.onEndInteraction();
+    }
 
+    public void endInteraction() //used as a workaround to the fact that onEndInteraction is protected.
+    {
+        onEndInteraction();
     }
 
     protected override void LateUpdate()

@@ -10,6 +10,6 @@ public class DialogueTrigger : MonoBehaviour
 
     public void triggerDialogue()
     {
-        FindObjectOfType<DialogueManager>().startDialogue(dialogue, name);
+        FindObjectOfType<DialogueManager>().startDialogue(dialogue, gameObject);
     }
 }

@@ -25,6 +25,8 @@ public class PathFinding : MonoBehaviour
     public float z1,z2,x1,x2;
     private bool hasWaited = false;
 
+    public int numberOfRoutinesRunning = 0;
+
     IEnumerator roamRutine;
 
     private void Awake()
@@ -54,7 +56,6 @@ public class PathFinding : MonoBehaviour
 
     private void Update()
     {
-        
 
     }
 
@@ -202,12 +203,16 @@ public class PathFinding : MonoBehaviour
 
     public void startRoam()
     {
+        StopAllCoroutines();
         StartCoroutine(roamRutine);
+        numberOfRoutinesRunning++;
     }
 
     public void stopRoam()
     {
-        StopCoroutine(roamRutine);
+        //StopCoroutine(roamRutine);
+        StopAllCoroutines();
+        numberOfRoutinesRunning=0;
     }
 
 }
