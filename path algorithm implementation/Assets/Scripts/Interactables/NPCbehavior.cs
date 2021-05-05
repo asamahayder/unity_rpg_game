@@ -7,10 +7,23 @@ public class NPCbehavior : Actor
 
     public string message;
     [SerializeField] private Texture2D cursorImage;
+
+    DialogueTrigger dialogueTrigger;
+
+
+    protected override void Start()
+    {
+        base.Start();
+        dialogueTrigger = GetComponent<DialogueTrigger>();
+    }
+
     protected override void onInteract()
     {
         base.onInteract();
         print(message);
+
+        dialogueTrigger.triggerDialogue();
+
         onEndInteraction();
     }
 

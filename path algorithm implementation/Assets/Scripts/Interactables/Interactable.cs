@@ -13,8 +13,6 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     protected bool isMouseOver = false;
     protected GameObject infoUI;
 
-
-
     protected virtual void Awake()
     {
         

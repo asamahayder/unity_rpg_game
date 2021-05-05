@@ -13,7 +13,7 @@ public class PathFinding : MonoBehaviour
     private GameObject currentWayPoint;
 
     private Grid grid;
-    public GameObject gridObject;
+    private GameObject gridObject;
 
     ObjectMover mover;
 
@@ -29,6 +29,7 @@ public class PathFinding : MonoBehaviour
 
     private void Awake()
     {
+        gridObject = GameObject.Find("Grid").gameObject;
         grid = gridObject.GetComponent<Grid>();
 
         mover = GetComponent<ObjectMover>();
