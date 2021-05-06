@@ -12,7 +12,7 @@ namespace ScriptableObjects.Items.Scripts
     }
     public abstract class ItemObject : ScriptableObject
     {
-        public ulong itemID;
+        public int itemID;
         public itemType itemType;
         public string itemName;
         [TextArea(15,20)]
@@ -26,7 +26,7 @@ namespace ScriptableObjects.Items.Scripts
     [System.Serializable]
     public class Item
     {
-        public ulong itemID;
+        public int itemID;
         public string itemName;
 
         public Item(ItemObject item)

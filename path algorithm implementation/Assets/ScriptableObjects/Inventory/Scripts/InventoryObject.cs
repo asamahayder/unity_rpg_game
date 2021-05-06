@@ -18,37 +18,56 @@ namespace ScriptableObjects.Inventory.Scripts
         public bool addItem(ItemObject itemObject, ulong itemAmount)
         {
             Item item = new Item(itemObject);
-            Debug.Log(item);
-            
             if (CheckTypesOfItem(itemObject))
             {
                 Debug.Log("item is Nonstackable");
-                if (Inventory.inventoryItemList.Count < 28)
-                {
-                    Inventory.inventoryItemList.Add(new InventorySlot(item.itemID, item, itemAmount));
-                    return true;
-                }
+                return findFirstEmptySlot(item, itemAmount, false) != null;
             }
 
-            for (int i = 0; i < Inventory.inventoryItemList.Count; i++)
+            foreach (var slot in Inventory.inventoryItemList)
             {
-                if (Inventory.inventoryItemList[i].item.itemID == item.itemID)
-                {
-                    Inventory.inventoryItemList[i].addItemAmount(itemAmount);
-                    return true;
-                }
+                if (slot.itemID != item.itemID) continue;
+                slot.addItemAmount(itemAmount);
+                return true;
             }
-            if (Inventory.inventoryItemList.Count < 28)
+
+            return findFirstEmptySlot(item, itemAmount, true) != null;
+        }
+
+        private InventorySlot findFirstEmptySlot(Item item, ulong itemAmount, bool stackable)
+        {
+            InventorySlot[] inventorySlots = Inventory.inventoryItemList;
+            foreach (var slot in inventorySlots)
             {
-                Inventory.inventoryItemList.Add(new InventorySlot(item.itemID, item, itemAmount));
+                if (slot.itemID != -1) continue;
+                slot.UpdateSlot(item.itemID, item, itemAmount);
+                return slot;
             }
-            return Inventory.inventoryItemList.Count < 28;
+            return null;
         }
 
         private bool CheckTypesOfItem(ItemObject itemObject)
         {
             return itemObject is ConsumableObject || itemObject is EquipmentObject ||
                    itemObject is MiscellaneousObject || itemObject is ResourceObject || itemObject is QuestObject;
+        }
+
+        public void MoveItem(InventorySlot itemOne, InventorySlot itemTwo)
+        {
+            InventorySlot temp = new InventorySlot(itemTwo.itemID, itemTwo.item, itemTwo.itemAmount);
+            itemTwo.UpdateSlot(itemOne.itemID, itemOne.item, itemOne.itemAmount);
+            itemOne.UpdateSlot(temp.itemID, temp.item, temp.itemAmount);
+        }
+
+        public void RemoveItem(Item item)
+        {
+            for (int i = 0; i < Inventory.inventoryItemList.Length; i++)
+            {
+                if (Inventory.inventoryItemList[i].item == item)
+                {
+                    Inventory.inventoryItemList[i].UpdateSlot(-1, null, 0);
+                }
+            }
         }
 
         [ContextMenu("Save")]
@@ -82,11 +101,25 @@ namespace ScriptableObjects.Inventory.Scripts
     [System.Serializable]
     public class InventorySlot
     {
-        public ulong itemID;
+        public int itemID;
         public Item item;
         public ulong itemAmount;
 
-        public InventorySlot(ulong itemId, Item item, ulong itemAmount)
+        public InventorySlot(int itemId, Item item, ulong itemAmount)
+        {
+            this.itemID = itemId;
+            this.item = item;
+            this.itemAmount = itemAmount;
+        }
+        
+        public InventorySlot()
+        {
+            this.itemID = -1;
+            this.item = null;
+            this.itemAmount = 0;
+        }
+
+        public void UpdateSlot(int itemId, Item item, ulong itemAmount)
         {
             this.itemID = itemId;
             this.item = item;
@@ -102,6 +135,6 @@ namespace ScriptableObjects.Inventory.Scripts
     [System.Serializable]
     public class Inventory
     {
-        public List<InventorySlot> inventoryItemList = new List<InventorySlot>();
+        public InventorySlot[] inventoryItemList = new InventorySlot[28];
     }
 }

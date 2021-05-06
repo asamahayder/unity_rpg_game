@@ -37,6 +37,6 @@ public class Character : MonoBehaviour
     
     private void OnApplicationQuit()
     {
-        playerInventoryObject.Inventory.inventoryItemList.Clear();
+        playerInventoryObject.Inventory.inventoryItemList = new InventorySlot[28];
     }
 }
