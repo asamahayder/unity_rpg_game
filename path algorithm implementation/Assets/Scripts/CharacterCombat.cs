@@ -7,9 +7,9 @@ using Image = UnityEngine.UI.Image;
 public class CharacterCombat : MonoBehaviour
 {
 
-    //Player Combat Stats
-    private float characterHP = 100f;
-    private float startCharacterHP;
+    //Player Combat Stats and variables
+    private float currentCharacterHP = 100f;
+    private float baseCharacterHP;
     private int combatLevel = 0;
     private const float baseAttackEXPNeeded = 100f;
     private float currentCombatEXP = 0f;
@@ -19,7 +19,12 @@ public class CharacterCombat : MonoBehaviour
     private int defencePower = 0;
     private int defencePowerBonus = 0;
 
-    
+    private int defencePowerGainOnNewLevel = 4;
+    private int attackPowerGainOnNewLevel = 4;
+    private int baseCharacterHPGainOnNewLevel = 10;
+
+
+
     //Other variables
     public GameObject damageTextPrefab;
     private GameObject damageTextPositionObject;
@@ -68,30 +73,36 @@ public class CharacterCombat : MonoBehaviour
     {
         set
         {
-            float difference = characterHP - value;
+            float difference = currentCharacterHP - value;
 
-            if(difference > 0) //received damage
+            if(difference >= 0) //received damage
             {
                 float baseDamage = difference; //damage before taken defence into account
-                float damage = baseDamage - Random.Range(0, defencePower); //the defencePower stat removes some of the damage taken
+                float defencePowerBonus = Random.Range(0, defencePower);
+                float damage = baseDamage - defencePowerBonus; //the defencePower stat removes some of the damage taken
+
+                if (damage < 0) damage = 0; //otherwise, if defencePower becomes too strong, you will gain health when getting damage.
+
+                print("damage before defencePower: " + baseDamage);
+                print("defencePowerBonus: " + defencePowerBonus);
 
                 GameObject damageText = Instantiate(damageTextPrefab, damageTextPositionObject.transform);
 
                 damageText.transform.GetChild(0).GetComponent<TextMeshPro>().SetText("-" + damage);
-                characterHP -= damage;
-                print("Character health: " + characterHP);
+                currentCharacterHP -= damage;
+                print("Character health: " + currentCharacterHP);
             }
             else //gained health
             {
-
+                currentCharacterHP = value;
             }
 
-            healthBar.GetComponent<Image>().fillAmount = characterHP / startCharacterHP;
+            healthBar.GetComponent<Image>().fillAmount = currentCharacterHP / baseCharacterHP;
 
         }
         get
         {
-            return characterHP;
+            return currentCharacterHP;
         }
     }
 
@@ -101,12 +112,12 @@ public class CharacterCombat : MonoBehaviour
         {
             combatLevel = value;
             currentCombatEXPNeeded = baseAttackEXPNeeded + combatLevel * .5f * baseAttackEXPNeeded;
-            attackPower = attackPowerBonus + combatLevel * 10;
-            defencePower = defencePowerBonus + combatLevel * 10;
+            attackPower = attackPowerBonus + combatLevel * attackPowerGainOnNewLevel;
+            defencePower = defencePowerBonus + combatLevel * defencePowerGainOnNewLevel;
+            baseCharacterHP += baseCharacterHPGainOnNewLevel;
+            CharacterHP = baseCharacterHP;
 
-            //levelUI.GetComponent<TextMeshPro>().SetText(combatLevel.ToString());
-
-
+            levelUI.GetComponent<TextMeshProUGUI>().SetText(combatLevel.ToString());
         }
         get
         {
@@ -120,13 +131,12 @@ public class CharacterCombat : MonoBehaviour
         {
             currentCombatEXP = value;
 
-
-            //update exp bar here
-
-            if (currentCombatEXP >= currentCombatEXPNeeded)
+            while (currentCombatEXP >= currentCombatEXPNeeded)
             {
-                combatLevel++;
+                currentCombatEXP -= currentCombatEXPNeeded;
+                CombatLevel++;
             }
+            expBar.GetComponent<Image>().fillAmount = currentCombatEXP / currentCombatEXPNeeded;
         }
         get
         {
@@ -142,7 +152,7 @@ public class CharacterCombat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startCharacterHP = characterHP;
+        baseCharacterHP = currentCharacterHP;
 
         damageTextPositionObject = gameObject.transform.Find("DamageTextEmitPosition").gameObject;
        
@@ -151,14 +161,17 @@ public class CharacterCombat : MonoBehaviour
         expBar = playerInfo.transform.Find("EXPBar").gameObject;
         levelUI = playerInfo.transform.Find("Level").gameObject;
 
-        CombatLevel = 1; //important this comes after the ui initialization above.
-
+        //important these comes after the ui initialization above.
+        attackPowerBonus += 50;
+        CombatLevel = 1; 
+        CurrentCombatEXP = 0;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(characterHP <= 0f && !isDead)
+        if(currentCharacterHP <= 0f && !isDead)
         {
             isDead = true;
             isInCombat = false;
@@ -169,7 +182,6 @@ public class CharacterCombat : MonoBehaviour
         {
             targetEnemy = null;
             isInCombat = false;
-            CurrentCombatEXP += 20;
         }
         
     }

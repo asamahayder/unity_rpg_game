@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class InputHandler : MonoBehaviour
 {
@@ -16,7 +18,11 @@ public class InputHandler : MonoBehaviour
 
     private GameObject targetObject;
     private GameObject interactableObject;
-    
+
+    private DialogueManager dialogueManager;
+
+    GraphicRaycaster raycaster;
+
 
     // Start is called before the first frame update
     void Start()
@@ -26,18 +32,19 @@ public class InputHandler : MonoBehaviour
         objectMover = GetComponent<ObjectMover>();
         outline.OutlineMode = Outline.Mode.SilhouetteOnly;
         outline.OutlineColor = Color.gray;
+        raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
+
+        dialogueManager = GameObject.Find("DialogueManager").gameObject.GetComponent<DialogueManager>();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-
         interactableObject = GetInterActableObject(); //we get every frame because we need to check if mouse is over an interactable object
 
-        if(interactableObject != null)
+        if(interactableObject != null && interactableObject.TryGetComponent(out IInteractable thing)) //the TryGetComponent is used to check if the interactable has implemented the nessesary functions for interactions.
         {
-            IInteractable thing = interactableObject.GetComponent<IInteractable>();
             thing.onMouseOver();
         }
         else
@@ -48,9 +55,9 @@ public class InputHandler : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-    
             if(interactableObject == null) //Mouse on ground
             {
+                dialogueManager.endDialogue();
                 pathfinder.findPath(GetMouseClickWorldPosition(), false);
                 movingTowardsTarget = false;
                 targetObject = null;
@@ -70,11 +77,10 @@ public class InputHandler : MonoBehaviour
         //ACTUALLY  now i think about it, i might be able to remove the bool. Because i can just check:
         //if target != null && distance < minimumDistance => target.onInteract; target ? null.
         //TODO: maybe implement the above. It is slightly more clean.
-        if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) <= minimumDistanceToTarget)
+        if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) <= minimumDistanceToTarget && targetObject.TryGetComponent(out IInteractable thing2)) //thing is already taken apparently
         {
             movingTowardsTarget = false;
-            IInteractable interactableObject = targetObject.GetComponent<IInteractable>();
-            interactableObject.onInteract();
+            thing2.onInteract();
         }
 
         //we have reached the target
@@ -111,19 +117,44 @@ public class InputHandler : MonoBehaviour
     }
 
 
+    private GameObject getUIObject()
+    {
+        PointerEventData mouseData = new PointerEventData(EventSystem.current);
+        List<RaycastResult> hits = new List<RaycastResult>();
+        
+        mouseData.position = Input.mousePosition;
+        raycaster.Raycast(mouseData, hits);
+
+        if (hits.Count > 0)
+        {
+            return hits[0].gameObject;
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+
     private GameObject GetInterActableObject()
     {
         GameObject gameObject = null;
+        //First we check if we are on a ui object:
+        gameObject = getUIObject();
 
-        LayerMask interactableMask = LayerMask.GetMask("Interactable");
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1000f, interactableMask))
+        //if no hits, we then check for objects in the world:
+        if (gameObject == null)
         {
-            gameObject = hit.collider.gameObject;
+            LayerMask interactableMask = LayerMask.GetMask("Interactable");
 
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 1000f, interactableMask))
+            {
+                gameObject = hit.collider.gameObject;
+
+            }
         }
 
         return gameObject;

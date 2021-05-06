@@ -15,7 +15,6 @@ public class Actor : Interactable
     {
         pathfinder.stopRoam();
         objectMover.clearPath(); //this stops the actor from following his current path.
-        //objectMover.updatePath(null);
         isInteracting = true;
       
     }
@@ -26,14 +25,9 @@ public class Actor : Interactable
     protected virtual void onEndInteraction()
     {
         isInteracting = false;
-        StartCoroutine(waitBeforeStartRoam());
-    }
-
-    private IEnumerator waitBeforeStartRoam()
-    {
-        yield return new WaitForSeconds(3);
         pathfinder.startRoam();
     }
+
 
     protected override void onMouseOver()
     {

@@ -10,8 +10,13 @@ public class EnemyBehavior : Actor
     CharacterCombat characterCombat;
     private bool isInCombat = false;
 
-    [SerializeField] private float enemyHP = 100f;
-    private float startHP;
+    public int enemyLevel;
+    [SerializeField] private float currentEnemyHP = 100f;
+    private float baseHP;
+    public int expToGiveWhenDead = 100;
+    public int attackPower;
+    public int defencePower;
+    
     [SerializeField] private Texture2D cursorImage;
 
     public GameObject damageTextPrefab;
@@ -20,22 +25,44 @@ public class EnemyBehavior : Actor
     public float attackRange = 3f;
 
     private GameObject healthBar;
+    private GameObject levelText;
+    private GameObject nameText;
+
     
+
+    private bool isDead = false;
+
 
     //TODO: the characterHP logic is copied inside this and CharacterCombat. Implement a better OOP way than this.
     public float EnemyHP
     {
         set
         {
-            GameObject damageText = Instantiate(damageTextPrefab, damageTextPositionObject.transform);
-            float difference = enemyHP - value;
-            damageText.transform.GetChild(0).GetComponent<TextMeshPro>().SetText("-" + difference);
-            enemyHP = value;
-            healthBar.GetComponent<Image>().fillAmount = (enemyHP/startHP);
+            float difference = currentEnemyHP - value;
+
+            if (difference >= 0) //received damage
+            {
+                float baseDamage = difference; //damage before taken defence into account
+                float defencePowerBonus = Random.Range(0, defencePower);
+                float damage = baseDamage - defencePowerBonus; //the defencePower stat removes some of the damage taken
+
+                if (damage < 0) damage = 0; //otherwise, if defencePower becomes too strong, you will gain health when getting damage.
+
+                GameObject damageText = Instantiate(damageTextPrefab, damageTextPositionObject.transform);
+
+                damageText.transform.GetChild(0).GetComponent<TextMeshPro>().SetText("-" + damage);
+                currentEnemyHP -= damage;   
+            }
+            else //gained health
+            {
+                currentEnemyHP = value;
+            }
+
+            healthBar.GetComponent<Image>().fillAmount = currentEnemyHP / baseHP;
         }
         get
         {
-            return enemyHP;
+            return currentEnemyHP;
         }
     }
 
@@ -59,7 +86,6 @@ public class EnemyBehavior : Actor
         IsinCombat = true; //important that this is before startCoroutine
         if (characterCombat.TargetEnemy == null) characterCombat.TargetEnemy = this;
         else print("You are already fighting an enemy!");
-      
     }
 
     protected override void onMouseOver()
@@ -74,7 +100,7 @@ public class EnemyBehavior : Actor
         outlineColor = Color.red; //important that this is before base.start
         base.Start();
         characterCombat = playerCharacter.GetComponent<CharacterCombat>();
-        startHP = enemyHP;
+        baseHP = currentEnemyHP;
     }
 
     protected override void LateUpdate()
@@ -86,10 +112,12 @@ public class EnemyBehavior : Actor
     protected override void Update()
     {
         base.Update();
-        if(enemyHP <= 0)
+        if(currentEnemyHP <= 0 && !isDead)
         {
+            isDead = true;
             animator.SetBool("isDead", true);
             isInteracting = false;
+            characterCombat.CurrentCombatEXP += expToGiveWhenDead;
         }
 
 
@@ -124,6 +152,11 @@ public class EnemyBehavior : Actor
 
     public void onDie()
     {
+        if(transform.parent != null)
+        {
+            GetComponentInParent<EnemySpawnerLogic>().CurrentEnemyCount--;
+        }
+
         Destroy(gameObject);
     }
     
@@ -131,9 +164,9 @@ public class EnemyBehavior : Actor
 
     public void attack()
     {
-        if (isInCombat && !(enemyHP <= 0) && !(characterCombat.CharacterHP <= 0f) && Vector3.Distance(playerCharacter.transform.position, transform.position) <= 3)
+        if (isInCombat && !(currentEnemyHP <= 0) && !(characterCombat.CharacterHP <= 0f) && Vector3.Distance(playerCharacter.transform.position, transform.position) <= 3)
         {
-            characterCombat.CharacterHP -= 10f;
+            characterCombat.CharacterHP -= Random.Range(0,attackPower);
             
         }
         else
@@ -153,6 +186,10 @@ public class EnemyBehavior : Actor
     {
         infoUI = gameObject.transform.Find("EnemyInfo").gameObject;
         healthBar = infoUI.transform.Find("HealthBarBackground").gameObject.transform.Find("HealthBar").gameObject;
+        levelText = infoUI.transform.Find("LevelText").gameObject;
+        levelText.GetComponent<TextMeshProUGUI>().SetText("LVL: " + enemyLevel);
+        nameText = infoUI.transform.Find("NameText").gameObject;
+        nameText.GetComponent<TextMeshProUGUI>().SetText(name);
     }
 
 }

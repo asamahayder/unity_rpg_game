@@ -56,17 +56,19 @@ public class Grid : MonoBehaviour
 
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         //first we find how many nodes we can fit inside the grid.
         nodeDiameter = nodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter); //we use Mathf to round to integer because we cant have halv nodes etc.
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
         CreateGrid();
+    }
 
-
-
+    // Start is called before the first frame update
+    void Start()
+    {
+    
     }
 
     public int MaxSize
@@ -87,7 +89,6 @@ public class Grid : MonoBehaviour
             for (int y = 0; y < gridSizeY; y++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-                //bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
                 bool walkable = !(Physics.CheckBox(worldPoint, new Vector3(nodeRadius / 2, 1000, nodeRadius / 2), new Quaternion(), unwalkableMask));
                 grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
@@ -100,8 +101,13 @@ public class Grid : MonoBehaviour
         float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
         float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
 
-        percentX = Mathf.Clamp01(percentX); //makes sure that our percentage value is always between 0 and 1. (like in case the character is outside the map)
-        percentY = Mathf.Clamp01(percentY);
+        //percentX = Mathf.Clamp01(percentX); //makes sure that our percentage value is always between 0 and 1. (like in case the character is outside the map)
+        //percentY = Mathf.Clamp01(percentY);
+
+        if(percentX > 1 || percentX < 0 || percentY > 1 || percentY < 0)
+        {
+            return new Node(false, new Vector3(0, 0, 0), 0, 0);
+        }
 
         int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
