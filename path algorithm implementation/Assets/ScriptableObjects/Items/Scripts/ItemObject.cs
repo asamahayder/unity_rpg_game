@@ -34,5 +34,11 @@ namespace ScriptableObjects.Items.Scripts
             itemID = item.itemID;
             itemName = item.itemName;
         }
+
+        public Item()
+        {
+            itemID = -1;
+            itemName = "";
+        }
     }
 }

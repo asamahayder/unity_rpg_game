@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using ScriptableObjects.Items.Scripts;
 using UnityEngine;
@@ -98,7 +99,7 @@ namespace ScriptableObjects.Inventory.Scripts
         [ContextMenu("Clear Inventory")]
         public void ClearInventory()
         {
-            inventory = new Inventory();
+            inventory.Clear();
         }
     }
 
@@ -106,6 +107,8 @@ namespace ScriptableObjects.Inventory.Scripts
     [System.Serializable]
     public class InventorySlot
     {
+        public UserInterface parent;
+        public EquipmentType[] equipmentTypes = new EquipmentType[0];
         public int itemID;
         public Item item;
         public ulong itemAmount;
@@ -137,6 +140,20 @@ namespace ScriptableObjects.Inventory.Scripts
         {
             this.itemAmount += itemAmountToBeAdded;
         }
+
+        public bool isValidSlotPlacement(ItemObject itemObject)
+        {
+            if (equipmentTypes.Length <= 0)
+            {
+                return true;
+            }
+
+            if (itemObject is EquipmentObject equipmentObject)
+            {
+                return equipmentTypes.Any(type => equipmentObject.equipmentType == type);
+            }
+            return false;
+        }
     }
 
     // The base inventory class which holds all the inventory slots for this inventory. It starts with being 28 empty item slots
@@ -144,5 +161,13 @@ namespace ScriptableObjects.Inventory.Scripts
     public class Inventory
     {
         public InventorySlot[] inventoryItemList = new InventorySlot[28];
+
+        public void Clear()
+        {
+            for (int i = 0; i < inventoryItemList.Length; i++)
+            {
+                inventoryItemList[i].UpdateSlot(-1, new Item(), 0);
+            }
+        }
     }
 }

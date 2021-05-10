@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    public readonly MouseDragger _mouseDragger = new MouseDragger();
     public InventoryObject playerInventoryObject;
 
     private void OnTriggerEnter(Collider other)

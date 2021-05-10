@@ -159,13 +159,3 @@ public class InventoryScreen : MonoBehaviour
     }
     
 }
-
-// Contains the information regarding the currently dragged item and the item it's hovering over at the moment 
-public class MouseDragger
-{
-    public GameObject objOfDraggedItem;
-    public GameObject objOfHoveredOverItem;
-    public InventorySlot itemDragged;
-    public InventorySlot itemHoveringOver;
-    
-}
