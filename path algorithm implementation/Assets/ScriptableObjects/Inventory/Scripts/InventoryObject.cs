@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using ScriptableObjects.Items.Scripts;
-using UnityEditor;
 using UnityEngine;
 
 namespace ScriptableObjects.Inventory.Scripts
@@ -13,30 +10,30 @@ namespace ScriptableObjects.Inventory.Scripts
     {
         public string databaseSaveDir;
         public ItemDatabase db;
-        public Inventory Inventory;
+        public Inventory inventory;
 
-        public bool addItem(ItemObject itemObject, ulong itemAmount)
+        // Adds items to a item slot in the inventory. If it is full, it will not add anymore items, unless it's a stackable item
+        public bool AddItemToInventorySlot(ItemObject itemObject, ulong itemAmount)
         {
-            Item item = new Item(itemObject);
+            var item = new Item(itemObject);
             if (CheckTypesOfItem(itemObject))
             {
-                Debug.Log("item is Nonstackable");
-                return findFirstEmptySlot(item, itemAmount, false) != null;
+                //Debug.Log("item is NonStackable");
+                return FindFirstEmptySlot(item, itemAmount) != null;
             }
-
-            foreach (var slot in Inventory.inventoryItemList)
+            foreach (var slot in inventory.inventoryItemList)
             {
                 if (slot.itemID != item.itemID) continue;
                 slot.addItemAmount(itemAmount);
                 return true;
             }
-
-            return findFirstEmptySlot(item, itemAmount, true) != null;
+            return FindFirstEmptySlot(item, itemAmount) != null;
         }
 
-        private InventorySlot findFirstEmptySlot(Item item, ulong itemAmount, bool stackable)
+        // Iterates through the inventory to find an empty slot for the new item
+        private InventorySlot FindFirstEmptySlot(Item item, ulong itemAmount)
         {
-            InventorySlot[] inventorySlots = Inventory.inventoryItemList;
+            var inventorySlots = inventory.inventoryItemList;
             foreach (var slot in inventorySlots)
             {
                 if (slot.itemID != -1) continue;
@@ -46,58 +43,66 @@ namespace ScriptableObjects.Inventory.Scripts
             return null;
         }
 
-        private bool CheckTypesOfItem(ItemObject itemObject)
+        // Checks whether an item is stackable or not
+        // TODO probably better to have an attribute for the item to indicate if it's stackable or not instead of doing the checking here
+        private static bool CheckTypesOfItem(ItemObject itemObject)
         {
             return itemObject is ConsumableObject || itemObject is EquipmentObject ||
                    itemObject is MiscellaneousObject || itemObject is ResourceObject || itemObject is QuestObject;
         }
 
-        public void MoveItem(InventorySlot itemOne, InventorySlot itemTwo)
+        // Moves an item from one inventory slot to another
+        public static void MoveItem(InventorySlot itemOne, InventorySlot itemTwo)
         {
-            InventorySlot temp = new InventorySlot(itemTwo.itemID, itemTwo.item, itemTwo.itemAmount);
+            var temp = new InventorySlot(itemTwo.itemID, itemTwo.item, itemTwo.itemAmount);
             itemTwo.UpdateSlot(itemOne.itemID, itemOne.item, itemOne.itemAmount);
             itemOne.UpdateSlot(temp.itemID, temp.item, temp.itemAmount);
         }
 
+        // Removes item from the inventory
+        // TODO implement a right click drop interface for the item (could also just implement drag to drop, already ready)
         public void RemoveItem(Item item)
         {
-            for (int i = 0; i < Inventory.inventoryItemList.Length; i++)
+            foreach (var slotItem in inventory.inventoryItemList)
             {
-                if (Inventory.inventoryItemList[i].item == item)
+                if (slotItem.item == item)
                 {
-                    Inventory.inventoryItemList[i].UpdateSlot(-1, null, 0);
+                    slotItem.UpdateSlot(-1, null, 0);
                 }
             }
         }
 
+        // Saves this class's information to a JSON file.
         [ContextMenu("Save")]
         public void SaveDatabase()
         {
-            string saveData = JsonUtility.ToJson(this, true);
+            var saveData = JsonUtility.ToJson(this, true);
             BinaryFormatter bf = new BinaryFormatter();
             FileStream fs = File.Create(string.Concat(Application.persistentDataPath, databaseSaveDir));
             bf.Serialize(fs, saveData);
             fs.Close();
         }
+        
+        // Loads the class's information from the saved JSON file. If there isn't one to load, nothing is done
         [ContextMenu("Load")]
         public void LoadDatabase()
         {
-            if (File.Exists(string.Concat(Application.persistentDataPath, databaseSaveDir)))
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                FileStream fs = File.Open(string.Concat(Application.persistentDataPath, databaseSaveDir), FileMode.Open);
-                JsonUtility.FromJsonOverwrite(bf.Deserialize(fs).ToString(),this);
-                fs.Close();
-            }
+            if (!File.Exists(string.Concat(Application.persistentDataPath, databaseSaveDir))) return;
+            var bf = new BinaryFormatter();
+            var fs = File.Open(string.Concat(Application.persistentDataPath, databaseSaveDir), FileMode.Open);
+            JsonUtility.FromJsonOverwrite(bf.Deserialize(fs).ToString(),this);
+            fs.Close();
         }
 
+        // An easy way to clear the inventory. Mostly used for testing purposes at the moment
         [ContextMenu("Clear Inventory")]
         public void ClearInventory()
         {
-            Inventory = new Inventory();
+            inventory = new Inventory();
         }
     }
 
+    // The class that contains all the information regarding a item's slot in the inventory
     [System.Serializable]
     public class InventorySlot
     {
@@ -119,19 +124,22 @@ namespace ScriptableObjects.Inventory.Scripts
             this.itemAmount = 0;
         }
 
-        public void UpdateSlot(int itemId, Item item, ulong itemAmount)
+        // Updates the current item in this slot with the new item given from the parameters
+        public void UpdateSlot(int newItemId, Item newItem, ulong newItemAmount)
         {
-            this.itemID = itemId;
-            this.item = item;
-            this.itemAmount = itemAmount;
+            this.itemID = newItemId;
+            this.item = newItem;
+            this.itemAmount = newItemAmount;
         }
 
-        public void addItemAmount(ulong amount)
+        // Adds to the item amount of the item in this item slot
+        public void addItemAmount(ulong itemAmountToBeAdded)
         {
-            itemAmount += amount;
+            this.itemAmount += itemAmountToBeAdded;
         }
     }
 
+    // The base inventory class which holds all the inventory slots for this inventory. It starts with being 28 empty item slots
     [System.Serializable]
     public class Inventory
     {

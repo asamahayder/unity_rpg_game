@@ -13,7 +13,7 @@ public class Character : MonoBehaviour
         Debug.Log(groundItem.itemObject.itemName);
         if (groundItem)
         {
-            if (playerInventoryObject.addItem(groundItem.itemObject, groundItem.itemObject.itemAmount))
+            if (playerInventoryObject.AddItemToInventorySlot(groundItem.itemObject, groundItem.itemObject.itemAmount))
             {
                 Destroy(other.gameObject);
             }
@@ -37,6 +37,6 @@ public class Character : MonoBehaviour
     
     private void OnApplicationQuit()
     {
-        playerInventoryObject.Inventory.inventoryItemList = new InventorySlot[28];
+        playerInventoryObject.inventory.inventoryItemList = new InventorySlot[28];
     }
 }
