@@ -3,7 +3,7 @@ using ScriptableObjects.Inventory.Scripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DynamicInterface : UserInterface
+public class CharacterInventoryScreen : CharacterUserInterface
 {
     public GameObject inventoryItemSlotPrefab;
     

@@ -107,7 +107,7 @@ namespace ScriptableObjects.Inventory.Scripts
     [System.Serializable]
     public class InventorySlot
     {
-        public UserInterface parent;
+        public CharacterUserInterface parent;
         public EquipmentType[] equipmentTypes = new EquipmentType[0];
         public int itemID;
         public Item item;
@@ -156,7 +156,7 @@ namespace ScriptableObjects.Inventory.Scripts
         }
     }
 
-    // The base inventory class which holds all the inventory slots for this inventory. It starts with being 28 empty item slots
+    // The base inventory class which holds all the inventory slots. It starts with being 28 empty item slots or 5 for the equipment "inventory"
     [System.Serializable]
     public class Inventory
     {
@@ -164,9 +164,9 @@ namespace ScriptableObjects.Inventory.Scripts
 
         public void Clear()
         {
-            for (int i = 0; i < inventoryItemList.Length; i++)
+            foreach (var slot in inventoryItemList)
             {
-                inventoryItemList[i].UpdateSlot(-1, new Item(), 0);
+                slot.UpdateSlot(-1, new Item(), 0);
             }
         }
     }

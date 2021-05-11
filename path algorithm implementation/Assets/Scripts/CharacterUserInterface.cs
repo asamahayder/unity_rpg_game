@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class UserInterface : MonoBehaviour
+public abstract class CharacterUserInterface : MonoBehaviour
 {
     public Character character;
     public InventoryObject inventoryObject;
@@ -15,10 +15,11 @@ public abstract class UserInterface : MonoBehaviour
     
     void Start()
     {
-        for (int i = 0; i < inventoryObject.inventory.inventoryItemList.Length; i++)
+        foreach (var slot in inventoryObject.inventory.inventoryItemList)
         {
-            inventoryObject.inventory.inventoryItemList[i].parent = this;
+            slot.parent = this;
         }
+
         CreateInventorySlots();
     }
 
@@ -100,6 +101,7 @@ public abstract class UserInterface : MonoBehaviour
     // dragged item object is destroyed
     protected void OnDragEnd(GameObject obj)
     {
+        var itemDragged = character._mouseDragger.itemDragged;
         var itemHoveringOver = character._mouseDragger.itemHoveringOver;
         var objHoveringOVer = character._mouseDragger.objOfHoveredOverItem;
         var getItem = inventoryObject.db.GetItem;
@@ -107,10 +109,13 @@ public abstract class UserInterface : MonoBehaviour
         if (objHoveringOVer)
         {
             // BIG BOY IF STATEMENT LOL
-            // Checks if the item can be moved to a certain item slot or not depenging on its itemID. -1 is default for an empty item slot 0 and above is items.
+            // Checks if the item can be moved to a certain item slot or not depending on its itemID. -1 is default for an empty item slot 0 and above is items.
             // there's also a method that checks if items can be placed on the equipment or not
-            if (itemHoveringOver.isValidSlotPlacement(inventoryObject.db.GetItem[displayedItems[obj].itemID]) && (itemHoveringOver.item.itemID <= -1 || (itemHoveringOver.item.itemID >= 0 && displayedItems[obj].isValidSlotPlacement(getItem[itemHoveringOver.item.itemID]))))
+            if (itemHoveringOver.isValidSlotPlacement(inventoryObject.db.GetItem[displayedItems[obj].itemID]) 
+                && (itemHoveringOver.item.itemID <= -1 
+                    || (itemHoveringOver.item.itemID >= 0 && displayedItems[obj].isValidSlotPlacement(getItem[itemHoveringOver.item.itemID]))))
             {
+                UpdateEquipmentStats(itemDragged, itemHoveringOver, getItem);
                 InventoryObject.MoveItem(displayedItems[obj], itemHoveringOver.parent.displayedItems[objHoveringOVer]);
             }
             
@@ -123,6 +128,62 @@ public abstract class UserInterface : MonoBehaviour
 
         Destroy(character._mouseDragger.objOfDraggedItem);
         character._mouseDragger.itemDragged = null;
+    }
+
+    private void UpdateEquipmentStats(InventorySlot itemDragged, InventorySlot itemHoveringOver, Dictionary<int, ItemObject> getItem)
+    {
+        var characterCombat = character.GetComponent<CharacterCombat>();
+        var stats = new int[2];
+        if (itemDragged.parent is CharacterEquipmentScreen)
+        {
+            switch (itemDragged.item.itemID >= 0)
+            {
+                case true when itemHoveringOver.item.itemID >= 0:
+                {
+                    if (getItem[itemHoveringOver.item.itemID] is EquipmentObject equipment1 && getItem[itemDragged.item.itemID] is EquipmentObject equipment2)
+                    {
+                        stats = characterCombat.UpdateCombatBonuses(equipment1.atkPower - equipment2.atkPower, equipment1.defPower - equipment2.defPower);
+                    }
+
+                    break;
+                }
+                case true when itemHoveringOver.item.itemID <= -1:
+                {
+                    if (getItem[itemDragged.item.itemID] is EquipmentObject equipment)
+                    {
+                        stats = characterCombat.UpdateCombatBonuses(-equipment.atkPower,-equipment.defPower);
+                    }
+
+                    break;
+                }
+            }
+        }
+        else if (itemHoveringOver.parent is CharacterEquipmentScreen)
+        {
+            switch (itemDragged.item.itemID >= 0)
+            {
+                case true when itemHoveringOver.item.itemID >= 0:
+                {
+                    if (getItem[itemHoveringOver.item.itemID] is EquipmentObject equipment1 && getItem[itemDragged.item.itemID] is EquipmentObject equipment2)
+                    {
+                        stats = characterCombat.UpdateCombatBonuses(equipment1.atkPower - equipment2.atkPower, equipment1.defPower - equipment2.defPower);
+                    }
+
+                    break;
+                }
+                case true when itemHoveringOver.item.itemID <= -1:
+                {
+                    if (getItem[itemDragged.item.itemID] is EquipmentObject equipment)
+                    {
+                        stats = characterCombat.UpdateCombatBonuses(equipment.atkPower,equipment.defPower);
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        Debug.Log("ATTACK/DEFENSE POWER!!! : " + stats[0]+ " " + stats[1]);
     }
 
     // When dragging an item, the new dragged item object gets a copy of the sprite which was in the item slot and it 

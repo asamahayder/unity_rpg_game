@@ -3,7 +3,7 @@ using ScriptableObjects.Inventory.Scripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class StaticInterface : UserInterface
+public class CharacterEquipmentScreen : CharacterUserInterface
 {
 
     public GameObject[] equipmentSlots;

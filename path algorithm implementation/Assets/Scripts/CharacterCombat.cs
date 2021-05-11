@@ -125,6 +125,13 @@ public class CharacterCombat : MonoBehaviour
         }
     }
 
+    public int[] UpdateCombatBonuses(int attackBonus, int defenceBonus)
+    {
+        attackPower += attackBonus;
+        defencePower += defenceBonus;
+        return new[] {attackPower, defencePower};
+    }
+
     public float CurrentCombatEXP
     {
         set

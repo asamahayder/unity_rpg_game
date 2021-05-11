@@ -5,7 +5,8 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public readonly MouseDragger _mouseDragger = new MouseDragger();
-    public InventoryObject playerInventoryObject;
+    public InventoryObject inventory;
+    public InventoryObject equipment;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,7 +15,7 @@ public class Character : MonoBehaviour
         Debug.Log(groundItem.itemObject.itemName);
         if (groundItem)
         {
-            if (playerInventoryObject.AddItemToInventorySlot(groundItem.itemObject, groundItem.itemObject.itemAmount))
+            if (inventory.AddItemToInventorySlot(groundItem.itemObject, groundItem.itemObject.itemAmount))
             {
                 Destroy(other.gameObject);
             }
@@ -26,18 +27,19 @@ public class Character : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("SPACE PRESSED");
-            playerInventoryObject.SaveDatabase();
+            inventory.SaveDatabase();
         }
 
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Debug.Log("ENTER PRESSED");
-            playerInventoryObject.LoadDatabase();
+            Debug.Log("BACKSPACE PRESSED");
+            inventory.LoadDatabase();
         }
     }
     
     private void OnApplicationQuit()
     {
-        playerInventoryObject.inventory.inventoryItemList = new InventorySlot[28];
+        inventory.inventory.Clear();
+        equipment.inventory.Clear();
     }
 }
