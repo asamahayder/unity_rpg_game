@@ -870,6 +870,7 @@ MonoBehaviour:
   z2: 0
   x1: 0
   x2: 0
+  numberOfRoutinesRunning: 0
 --- !u!136 &2327997046148290700
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -914,13 +915,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef35f423fb8949f45a4858973efb2a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorImage: {fileID: 2800000, guid: 2d18e23e3ce249b4489b8bcdd02d3f48, type: 3}
   enemyLevel: 1
   currentEnemyHP: 100
   expToGiveWhenDead: 100
   attackPower: 10
   defencePower: 10
-  cursorImage: {fileID: 2800000, guid: 2d18e23e3ce249b4489b8bcdd02d3f48, type: 3}
   damageTextPrefab: {fileID: 7927342229813694213, guid: 03480a24978447443a90ab80e63f9f9e, type: 3}
+  lootChestPrefab: {fileID: 1000014188511100, guid: 5dcae5adf53292945adef517afe8041e, type: 3}
   attackRange: 3
 --- !u!114 &2327997046148290689
 MonoBehaviour:

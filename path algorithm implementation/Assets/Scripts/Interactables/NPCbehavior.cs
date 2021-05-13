@@ -5,8 +5,6 @@ using UnityEngine;
 public class NPCbehavior : Actor
 {
 
-    [SerializeField] private Texture2D cursorImage;
-
     DialogueTrigger dialogueTrigger;
 
 

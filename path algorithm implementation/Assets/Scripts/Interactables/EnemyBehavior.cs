@@ -16,10 +16,9 @@ public class EnemyBehavior : Actor
     public int expToGiveWhenDead = 100;
     public int attackPower;
     public int defencePower;
-    
-    [SerializeField] private Texture2D cursorImage;
 
     public GameObject damageTextPrefab;
+    public GameObject lootChestPrefab;
     private GameObject damageTextPositionObject;
 
     public float attackRange = 3f;
@@ -157,6 +156,8 @@ public class EnemyBehavior : Actor
             GetComponentInParent<EnemySpawnerLogic>().CurrentEnemyCount--;
         }
 
+        var enemyLeftLeg = transform.Find("mixamorig1:Hips/mixamorig1:LeftUpLeg/mixamorig1:LeftLeg/mixamorig1:LeftFoot").position;
+        Instantiate(lootChestPrefab, enemyLeftLeg, Quaternion.Euler(0, 0, 0));
         Destroy(gameObject);
     }
     

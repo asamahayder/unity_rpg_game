@@ -129,6 +129,8 @@ public class CharacterCombat : MonoBehaviour
     {
         attackPower += attackBonus;
         defencePower += defenceBonus;
+        attackPowerBonus += attackBonus;
+        defencePowerBonus += defenceBonus;
         return new[] {attackPower, defencePower};
     }
 

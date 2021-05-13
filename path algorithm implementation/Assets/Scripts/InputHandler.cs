@@ -77,22 +77,25 @@ public class InputHandler : MonoBehaviour
         //ACTUALLY  now i think about it, i might be able to remove the bool. Because i can just check:
         //if target != null && distance < minimumDistance => target.onInteract; target ? null.
         //TODO: maybe implement the above. It is slightly more clean.
-        if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) <= minimumDistanceToTarget && targetObject.TryGetComponent(out IInteractable thing2)) //thing is already taken apparently
+        if (targetObject != null)
         {
-            movingTowardsTarget = false;
-            thing2.onInteract();
-        }
+            if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) <= minimumDistanceToTarget && targetObject.TryGetComponent(out IInteractable thing2)) //thing is already taken apparently
+            {
+                movingTowardsTarget = false;
+                thing2.onInteract();
+            }
 
-        //we have reached the target
-        if(targetObject != null && !movingTowardsTarget)
-        {
-            objectMover.turnTowardsTarget(targetObject.transform, 10f);
-        }
+            //we have reached the target
+            if(targetObject != null && !movingTowardsTarget && objectMover != null)
+            {
+                objectMover.turnTowardsTarget(targetObject.transform, 10f);
+            }
 
-        //Calculate path every frame in case the target is an NPC that is moving
-        if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) > minimumDistanceToTarget)
-        {
-            pathfinder.findPath(targetObject.transform.position, true);
+            //Calculate path every frame in case the target is an NPC that is moving
+            if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) > minimumDistanceToTarget)
+            {
+                pathfinder.findPath(targetObject.transform.position, true);
+            }
         }
         
     }

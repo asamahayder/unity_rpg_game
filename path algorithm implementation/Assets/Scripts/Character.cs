@@ -13,12 +13,10 @@ public class Character : MonoBehaviour
         var groundItem = other.GetComponent<GroundItem>();
         //Debug.Log(item);
         Debug.Log(groundItem.itemObject.itemName);
-        if (groundItem)
+        if (!groundItem) return;
+        if (inventory.AddItemToInventorySlot(groundItem.itemObject, groundItem.itemObject.itemAmount))
         {
-            if (inventory.AddItemToInventorySlot(groundItem.itemObject, groundItem.itemObject.itemAmount))
-            {
-                Destroy(other.gameObject);
-            }
+            Destroy(other.gameObject);
         }
     }
 

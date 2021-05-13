@@ -12,147 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b27b1f698f697ec9091b230adeb92ea0, type: 3}
   m_Name: Player Equpiment
   m_EditorClassIdentifier: 
-  databaseSaveDir: 
-  db: {fileID: 0}
+  databaseSaveDir: /Equipment.Save
+  db: {fileID: 11400000, guid: ab0dc4d93d47270409d7f36f2f755923, type: 2}
   inventory:
     inventoryItemList:
-    - itemID: -1
+    - parent: {fileID: 0}
+      equipmentTypes: 00000000
+      itemID: -1
       item:
-        itemID: 0
+        itemID: -1
         itemName: 
       itemAmount: 0
-    - itemID: -1
+    - parent: {fileID: 0}
+      equipmentTypes: 02000000
+      itemID: -1
       item:
-        itemID: 0
+        itemID: -1
         itemName: 
       itemAmount: 0
-    - itemID: -1
+    - parent: {fileID: 0}
+      equipmentTypes: 01000000
+      itemID: -1
       item:
-        itemID: 0
+        itemID: -1
         itemName: 
       itemAmount: 0
-    - itemID: -1
+    - parent: {fileID: 0}
+      equipmentTypes: 03000000
+      itemID: -1
       item:
-        itemID: 0
+        itemID: -1
         itemName: 
       itemAmount: 0
-    - itemID: -1
+    - parent: {fileID: 0}
+      equipmentTypes: 04000000
+      itemID: -1
       item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
-        itemName: 
-      itemAmount: 0
-    - itemID: -1
-      item:
-        itemID: 0
+        itemID: -1
         itemName: 
       itemAmount: 0

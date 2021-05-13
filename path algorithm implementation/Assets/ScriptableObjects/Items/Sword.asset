@@ -19,5 +19,6 @@ MonoBehaviour:
   itemValue: 100
   itemAmount: 1
   itemSprite: {fileID: 21300000, guid: 9d2bd2c856a3bf07d97574e65e985e8b, type: 3}
-  atkPower: 10
+  equipmentType: 2
+  atkPower: 100
   defPower: 0

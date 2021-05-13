@@ -12,6 +12,8 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     protected Outline.Mode outlineMode = 0; //outline all
     protected bool isMouseOver = false;
     protected GameObject infoUI;
+    
+    [SerializeField] protected Texture2D cursorImage;
 
     protected virtual void Awake()
     {
@@ -42,9 +44,8 @@ public abstract class Interactable : MonoBehaviour, IInteractable
         if (isMouseOver)
         {
             showUI();
+            Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
         }
-        
-        
     }
 
 
