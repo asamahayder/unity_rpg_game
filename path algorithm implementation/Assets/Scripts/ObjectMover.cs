@@ -18,6 +18,8 @@ public class ObjectMover : MonoBehaviour
 
     private bool isAtEndOfPath = true;
 
+    private int terrainNumber = 0;
+
     private void Awake()
     {
         modelTransform = model.transform;
@@ -27,14 +29,16 @@ public class ObjectMover : MonoBehaviour
     private void Start()
     {
         Vector3 position = gameObject.transform.position;
-        float terrainY = Terrain.activeTerrains[Terrain.activeTerrains.Length-1].SampleHeight(gameObject.transform.position);
+
+        terrainNumber = GetClosestCurrentTerrain(position);
+
+        float terrainY = Terrain.activeTerrains[terrainNumber].SampleHeight(gameObject.transform.position);
         position.y = terrainY;
         gameObject.transform.position = position;
 
         oldPosition = gameObject.transform.position;
     }
 
-   
     void Update()
     {
 
@@ -80,7 +84,7 @@ public class ObjectMover : MonoBehaviour
                 isAtEndOfPath = true;
             }
 
-            float terrainY = Terrain.activeTerrains[Terrain.activeTerrains.Length-1].SampleHeight(currentPath[i].worldPosition);
+            float terrainY = Terrain.activeTerrains[terrainNumber].SampleHeight(currentPath[i].worldPosition);
 
             Vector3 targetPosition = currentPath[i].worldPosition;
             targetPosition.y = terrainY;
@@ -150,7 +154,30 @@ public class ObjectMover : MonoBehaviour
 
     }
 
+    //THE FOLLOWING CODE IS TAKEN FROM https://stackoverflow.com/questions/52345522/unity-get-the-actual-current-terrain
+    private int GetClosestCurrentTerrain(Vector3 playerPos)
+    {
+        Terrain[] _terrains = Terrain.activeTerrains;
+        //Get the closest one to the player
+        var center = new Vector3(_terrains[0].transform.position.x + _terrains[0].terrainData.size.x / 2, playerPos.y, _terrains[0].transform.position.z + _terrains[0].terrainData.size.z / 2);
+        float lowDist = (center - playerPos).sqrMagnitude;
+        var terrainIndex = 0;
 
+        for (int i = 0; i < _terrains.Length; i++)
+        {
+            center = new Vector3(_terrains[i].transform.position.x + _terrains[i].terrainData.size.x / 2, playerPos.y, _terrains[i].transform.position.z + _terrains[i].terrainData.size.z / 2);
+
+            //Find the distance and check if it is lower than the last one then store it
+            var dist = (center - playerPos).sqrMagnitude;
+            if (dist < lowDist)
+            {
+                lowDist = dist;
+                terrainIndex = i;
+            }
+        }
+        return terrainIndex;
+    }
+    //BORROWED CODE ENDS HERE
 
 
 }

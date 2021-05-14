@@ -82,6 +82,11 @@ public class InputHandler : MonoBehaviour
            
         }
 
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
+
 
         //The reason i don't just use the targetObject instead of also using the movingTowardsTarget bool, is to avoid activating an objects interact method every frame.
         //By using a bool, i can toggle it off idependently of the object. In other words, without having the bool, i would need to set the target to null which wont let me use its onInteract method.

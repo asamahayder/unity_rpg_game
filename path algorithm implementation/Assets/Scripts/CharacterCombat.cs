@@ -70,6 +70,21 @@ public class CharacterCombat : MonoBehaviour
         }
     }
 
+
+    public int AttackPowerBonus
+    {
+        set
+        {
+            attackPowerBonus = value;
+            attackPower = attackPowerBonus + combatLevel * attackPowerGainOnNewLevel;
+            print("HEEEEEEEEY!!!!!!!!!!!!!!!!!!!");
+        }
+        get
+        {
+            return attackPowerBonus;
+        }
+    }
+
     public float CharacterHP
     {
         set
@@ -128,9 +143,9 @@ public class CharacterCombat : MonoBehaviour
 
     public int[] UpdateCombatBonuses(int attackBonus, int defenceBonus)
     {
-        attackPower += attackBonus;
+        print("UPDATING POWEEEEEEEEER WITH: " + attackBonus);
         defencePower += defenceBonus;
-        attackPowerBonus += attackBonus;
+        AttackPowerBonus += attackBonus;
         defencePowerBonus += defenceBonus;
         return new[] {attackPower, defencePower};
     }
@@ -175,12 +190,13 @@ public class CharacterCombat : MonoBehaviour
         attackPowerBonus += 50;
         CombatLevel = 1; 
         CurrentCombatEXP = 0;
-        
     }
 
     // Update is called once per frame
     void Update()
     {
+        print("ATTACK POWEEEEEEER: " + attackPower);
+
         if(currentCharacterHP <= 0f && !isDead)
         {
             isDead = true;

@@ -2391,6 +2391,7 @@ GameObject:
   - component: {fileID: 7366225543933911999}
   - component: {fileID: 7886304007724382494}
   - component: {fileID: 7886304007724382490}
+  - component: {fileID: 3036023345433453299}
   - component: {fileID: 7886304007724382491}
   - component: {fileID: 7886304007724382488}
   - component: {fileID: 7886304007724382489}
@@ -2453,6 +2454,20 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &3036023345433453299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7886304007724382469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf37e5d934bb4b64c86cf997918e105e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollView: {fileID: 0}
+  questUIPrefab: {fileID: 7322799592129926650, guid: a829c8b63cdd83b4aa3d6a6223718361, type: 3}
 --- !u!114 &7886304007724382491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2518,6 +2533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e18289c04332fc41b78d0d4c0672fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noActionCursor: {fileID: 0}
   minimumDistanceToTarget: 2
 --- !u!114 &7886304007724382492
 MonoBehaviour:
