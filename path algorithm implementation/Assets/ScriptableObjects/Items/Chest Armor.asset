@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39016d9d57a026d33ba9fb061f69b4ec, type: 3}
-  m_Name: Body Armor
+  m_Name: Chest Armor
   m_EditorClassIdentifier: 
-  itemID: 0
+  itemID: 1
   itemType: 0
-  itemName: 
-  itemDescription: 
-  itemValue: 0
-  itemAmount: 0
-  itemSprite: {fileID: 0}
-  equipmentType: 0
+  itemName: Chest Armor
+  itemDescription: A piece of fancy armor
+  itemValue: 2000
+  itemAmount: 1
+  itemSprite: {fileID: 21300000, guid: e50523857b29efd22a49383b903fbe8a, type: 3}
+  equipmentType: 1
   atkPower: 0
-  defPower: 0
+  defPower: 30

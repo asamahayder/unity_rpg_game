@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39016d9d57a026d33ba9fb061f69b4ec, type: 3}
   m_Name: Shield
   m_EditorClassIdentifier: 
-  itemID: 0
+  itemID: 6
   itemType: 0
-  itemName: 
-  itemDescription: 
-  itemValue: 0
-  itemAmount: 0
-  itemSprite: {fileID: 0}
-  equipmentType: 0
+  itemName: Shield
+  itemDescription: A cool shield
+  itemValue: 1500
+  itemAmount: 1
+  itemSprite: {fileID: 21300000, guid: 34b8dfe56f1479adda51410ec313c3f8, type: 3}
+  equipmentType: 3
   atkPower: 0
-  defPower: 0
+  defPower: 15

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - hi
   - hola
+  - UI Canvas
   layers:
   - Default
   - TransparentFX

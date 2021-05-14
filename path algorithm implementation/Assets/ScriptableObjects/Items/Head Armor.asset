@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39016d9d57a026d33ba9fb061f69b4ec, type: 3}
   m_Name: Head Armor
   m_EditorClassIdentifier: 
-  itemID: 0
+  itemID: 3
   itemType: 0
-  itemName: 
-  itemDescription: 
-  itemValue: 0
-  itemAmount: 0
-  itemSprite: {fileID: 0}
+  itemName: Head Armor
+  itemDescription: Nice viking look
+  itemValue: 1000
+  itemAmount: 1
+  itemSprite: {fileID: 21300000, guid: 4c93a87c8f9bf66cb833eff83c19d190, type: 3}
   equipmentType: 0
   atkPower: 0
-  defPower: 0
+  defPower: 10
