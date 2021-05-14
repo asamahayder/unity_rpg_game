@@ -37,17 +37,19 @@ public abstract class CharacterUserInterface : MonoBehaviour
     {
         foreach (var slot in displayedItems)
         {
+            var slotImageObject = slot.Key.transform.GetChild(0).GetComponentInChildren<Image>();
+            var slotTextObject = slot.Key.GetComponentInChildren<TextMeshProUGUI>();
             if (slot.Value.itemID >= 0)
             {
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventoryObject.db.GetItem[slot.Value.item.itemID].itemSprite;
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1);
-                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = slot.Value.itemAmount == 1 ? "" : slot.Value.itemAmount.ToString("n0");
+                slotImageObject.sprite = inventoryObject.db.GetItem[slot.Value.item.itemID].itemSprite;
+                slotImageObject.color = new Color(1, 1, 1, 1);
+                slotTextObject.text = slot.Value.itemAmount == 1 ? "" : slot.Value.itemAmount.ToString("n0");
             }
             else
             {
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = null;
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
-                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = "";
+                slotImageObject.sprite = null;
+                slotImageObject.color = new Color(1, 1, 1, 0);
+                slotTextObject.text = "";
             }
         }
 
@@ -68,6 +70,7 @@ public abstract class CharacterUserInterface : MonoBehaviour
     protected void OnPointerClick(GameObject obj)
     {
         var itemSlot = displayedItems[obj];
+        if (itemSlot.item is null || itemSlot.item.itemID < 0) return;
         var itemObject = inventoryObject.db.GetItem[itemSlot.item.itemID];
         GameObject.Find("Character").GetComponent<Character>().inventory.AddItemToInventorySlot(itemObject,itemObject.itemAmount);
         inventoryObject.RemoveItem(displayedItems[obj].item);
@@ -76,18 +79,18 @@ public abstract class CharacterUserInterface : MonoBehaviour
     // Checks what object we're hovering over. IF it's another object than the first one we started dragging, we update the mousedragger object
     protected void OnPointerEnter(GameObject obj)
     {
-        character._mouseDragger.objOfHoveredOverItem = obj;
+        character.mousePointerObject.objUnderDragged = obj;
         if (displayedItems.ContainsKey(obj))
         {
-            character._mouseDragger.itemHoveringOver = displayedItems[obj];
+            character.mousePointerObject.itemUnderDragged = displayedItems[obj];
         }
     }
 
     // When finishing dragging, reset the mousedragger class to be null, so that we can start over again dragging a new item from beginDrag
     protected void OnPointerExit(GameObject obj)
     {
-        character._mouseDragger.objOfHoveredOverItem = null;
-        character._mouseDragger.itemHoveringOver = null;
+        character.mousePointerObject.objUnderDragged = null;
+        character.mousePointerObject.itemUnderDragged = null;
     }
 
     // When hovering over an item and wanting to begin dragging it to another inventory slot, this code fires
@@ -104,40 +107,43 @@ public abstract class CharacterUserInterface : MonoBehaviour
             // makes it so that the image doesn't overlap the mouse cursor
             newObjImage.raycastTarget = false;
         }
-        character._mouseDragger.objOfDraggedItem = mouseObject;
-        character._mouseDragger.itemDragged = displayedItems[obj];
+        character.mousePointerObject.objDragged = mouseObject;
+        character.mousePointerObject.itemDragged = displayedItems[obj];
     }
 
     // When finished dragging an item, it either switches place with another item slot or nothing happens and the 
     // dragged item object is destroyed
     protected void OnDragEnd(GameObject obj)
     {
-        var itemDragged = character._mouseDragger.itemDragged;
-        var itemHoveringOver = character._mouseDragger.itemHoveringOver;
-        var objHoveringOVer = character._mouseDragger.objOfHoveredOverItem;
+        var itemDragged = character.mousePointerObject.itemDragged;
+        var itemUnderDragged = character.mousePointerObject.itemUnderDragged;
+        var objUnderDragged = character.mousePointerObject.objUnderDragged;
         var getItem = inventoryObject.db.GetItem;
-        if (objHoveringOVer)
+        if (objUnderDragged)
         {
-            // BIG BOY IF STATEMENT LOL
-            // Checks if the item can be moved to a certain item slot or not depending on its itemID. -1 is default for an empty item slot 0 and above is items.
-            // there's also a method that checks if items can be placed on the equipment or not
-            if (itemHoveringOver.item.itemID <= -1 && itemDragged.item.itemID <= -1) return;
-            if (itemHoveringOver.isValidSlotPlacement(inventoryObject.db.GetItem[displayedItems[obj].itemID]) 
-                && (itemHoveringOver.item.itemID <= -1 
-                    || (itemHoveringOver.item.itemID >= 0 && displayedItems[obj].isValidSlotPlacement(getItem[itemHoveringOver.item.itemID]))))
+            if (itemUnderDragged.item.itemID <= -1 && itemDragged.item.itemID <= -1) return;
+            if (checkIfValidPlacement(itemUnderDragged, getItem, obj))
             {
-                UpdateEquipmentStats(itemDragged, itemHoveringOver, getItem);
-                InventoryObject.MoveItem(displayedItems[obj], itemHoveringOver.parent.displayedItems[objHoveringOVer]);
+                UpdateEquipmentStats(itemDragged, itemUnderDragged, getItem);
+                InventoryObject.MoveItem(displayedItems[obj], itemUnderDragged.parent.displayedItems[objUnderDragged]);
             }
 
         }
-        Destroy(character._mouseDragger.objOfDraggedItem);
-        character._mouseDragger.itemDragged = null;
+        Destroy(character.mousePointerObject.objDragged);
+        character.mousePointerObject.itemDragged = null;
+    }
+
+    private bool checkIfValidPlacement(InventorySlot itemHoveringOver, Dictionary<int, ItemObject> getItem, GameObject obj)
+    {
+        return itemHoveringOver.isValidSlotPlacement(inventoryObject.db.GetItem[displayedItems[obj].itemID])
+               && (itemHoveringOver.item.itemID <= -1
+                   || (itemHoveringOver.item.itemID >= 0 &&
+                       displayedItems[obj].isValidSlotPlacement(getItem[itemHoveringOver.item.itemID])));
     }
 
     private void UpdateEquipmentStats(InventorySlot itemDragged, InventorySlot itemHoveringOver, Dictionary<int, ItemObject> getItem)
     {
-        var characterCombat = character.GetComponent<CharacterCombat>();
+        var characterCombat = GameObject.Find("Character").GetComponent<Character>().gameObject.GetComponentInChildren<CharacterCombat>();
         var stats = new int[2];
         if (itemDragged.parent is CharacterEquipmentScreen)
         {
@@ -194,20 +200,20 @@ public abstract class CharacterUserInterface : MonoBehaviour
     // moves with the mouse that's dragging it across the screen
     protected void OnDrag(GameObject obj)
     {
-        if (character._mouseDragger.objOfDraggedItem != null)
+        if (character.mousePointerObject.objDragged != null)
         {
-            character._mouseDragger.objOfDraggedItem.GetComponent<RectTransform>().position = Input.mousePosition;
+            character.mousePointerObject.objDragged.GetComponent<RectTransform>().position = Input.mousePosition;
         }
     }
 
 }
 
 // Contains the information regarding the currently dragged item and the item it's hovering over at the moment 
-public class MouseDragger
+public class MousePointer
 {
-    public GameObject objOfDraggedItem;
-    public GameObject objOfHoveredOverItem;
+    public GameObject objDragged;
+    public GameObject objUnderDragged;
     public InventorySlot itemDragged;
-    public InventorySlot itemHoveringOver;
+    public InventorySlot itemUnderDragged;
     
 }

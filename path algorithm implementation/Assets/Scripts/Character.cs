@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    public readonly MouseDragger _mouseDragger = new MouseDragger();
+    public readonly MousePointer mousePointerObject = new MousePointer();
     public InventoryObject inventory;
     public InventoryObject equipment;
     

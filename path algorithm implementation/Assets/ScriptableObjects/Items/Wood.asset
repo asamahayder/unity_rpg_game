@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af362e9a2951f744b6829135f1fe19b, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
-  itemID: 3
+  itemID: 0
   itemType: 4
   itemName: Wood
   itemDescription: USed to sell to a merchant
   itemValue: 200
-  itemAmount: 0
+  itemAmount: 1
   itemSprite: {fileID: 21300000, guid: a80a8180561bcf14a94494935b9ca1af, type: 3}
   resourceType: 0
