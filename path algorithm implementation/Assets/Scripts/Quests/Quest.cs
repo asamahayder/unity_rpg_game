@@ -52,7 +52,7 @@ public abstract class Quest
     protected virtual void endQuest()
     {
         questFinished = true;
-        GameObject.Find("Character").GetComponent<Character>().playerInventoryObject.AddItemToInventorySlot(reward,500);
+        GameObject.Find("Character").GetComponent<Character>().inventory.AddItemToInventorySlot(reward,500);
         
     }
 

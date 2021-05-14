@@ -15,8 +15,6 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     
     [SerializeField] protected Texture2D cursorImage;
 
-    [SerializeField] private Texture2D cursorImage;
-
     protected virtual void Awake()
     {
         
