@@ -10,14 +10,14 @@ public class CharacterCombat : MonoBehaviour
     //Player Combat Stats and variables
     private float currentCharacterHP = 100f;
     private float baseCharacterHP;
-    private int combatLevel = 0;
+    private int combatLevel;
     private const float baseAttackEXPNeeded = 100f;
     private float currentCombatEXP = 0f;
     private float currentCombatEXPNeeded = 0f;
-    private int attackPower = 0;
-    private int attackPowerBonus = 0;
-    private int defencePower = 0;
-    private int defencePowerBonus = 0;
+    private int attackPower;
+    private int attackPowerBonus;
+    private int defencePower;
+    private int defencePowerBonus;
 
     private int defencePowerGainOnNewLevel = 4;
     private int attackPowerGainOnNewLevel = 4;
@@ -188,6 +188,9 @@ public class CharacterCombat : MonoBehaviour
 
         //important these comes after the ui initialization above.
         attackPowerBonus += 50;
+        attackPower = 0;
+        defencePowerBonus += 0;
+        defencePower = 0;
         CombatLevel = 1; 
         CurrentCombatEXP = 0;
     }
