@@ -13,6 +13,8 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     protected bool isMouseOver = false;
     protected GameObject infoUI;
 
+    [SerializeField] private Texture2D cursorImage;
+
     protected virtual void Awake()
     {
         
@@ -31,7 +33,7 @@ public abstract class Interactable : MonoBehaviour, IInteractable
         StartCoroutine(resetMouseOver());
     }
 
-    // Update is called once per frame
+    
     protected virtual void Update()
     {
         
@@ -42,6 +44,7 @@ public abstract class Interactable : MonoBehaviour, IInteractable
         if (isMouseOver)
         {
             showUI();
+            Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
         }
         
         

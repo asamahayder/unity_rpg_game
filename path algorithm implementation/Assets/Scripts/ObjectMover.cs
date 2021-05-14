@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class ObjectMover : MonoBehaviour
 {
-
-    
     List<Node> currentPath = new List<Node>();
     int i = 0;
     float radius = 1f;
@@ -29,13 +27,14 @@ public class ObjectMover : MonoBehaviour
     private void Start()
     {
         Vector3 position = gameObject.transform.position;
-        float terrainY = Terrain.activeTerrain.SampleHeight(gameObject.transform.position);
+        float terrainY = Terrain.activeTerrains[Terrain.activeTerrains.Length-1].SampleHeight(gameObject.transform.position);
         position.y = terrainY;
         gameObject.transform.position = position;
 
         oldPosition = gameObject.transform.position;
     }
 
+   
     void Update()
     {
 
@@ -81,7 +80,7 @@ public class ObjectMover : MonoBehaviour
                 isAtEndOfPath = true;
             }
 
-            float terrainY = Terrain.activeTerrain.SampleHeight(currentPath[i].worldPosition);
+            float terrainY = Terrain.activeTerrains[Terrain.activeTerrains.Length-1].SampleHeight(currentPath[i].worldPosition);
 
             Vector3 targetPosition = currentPath[i].worldPosition;
             targetPosition.y = terrainY;

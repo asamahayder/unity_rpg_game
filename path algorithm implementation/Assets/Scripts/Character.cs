@@ -5,6 +5,10 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public InventoryObject playerInventoryObject;
+    private TreeBehavior treeBehavior;
+
+    public delegate void OnLogGathered();
+    public static event OnLogGathered onLogGathered;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -34,9 +38,25 @@ public class Character : MonoBehaviour
             playerInventoryObject.LoadDatabase();
         }
     }
-    
+
+    private void Start()
+    {
+        treeBehavior = GameObject.Find("Tree").GetComponent<TreeBehavior>();
+    }
+
     private void OnApplicationQuit()
     {
         playerInventoryObject.inventory.inventoryItemList = new InventorySlot[28];
+    }
+
+    public void collectLogs()
+    {
+        playerInventoryObject.AddItemToInventorySlot(treeBehavior.logs, 1);
+
+        if (onLogGathered != null)
+        {
+            onLogGathered();
+        }
+
     }
 }

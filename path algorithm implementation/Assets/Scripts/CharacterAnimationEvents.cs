@@ -7,11 +7,13 @@ public class CharacterAnimationEvents : MonoBehaviour
 
 
     CharacterCombat characterCombat;
+    Character character;
 
     // Start is called before the first frame update
     void Start()
     {
         characterCombat = GetComponentInParent<CharacterCombat>();
+        character = GetComponentInParent<Character>();
     }
 
     // Update is called once per frame
@@ -24,4 +26,11 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         characterCombat.attack();
     }
+
+    void onCollectLogs()
+    {
+        character.collectLogs();
+    }
+
+
 }

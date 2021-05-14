@@ -23,7 +23,8 @@ public class CharacterCombat : MonoBehaviour
     private int attackPowerGainOnNewLevel = 4;
     private int baseCharacterHPGainOnNewLevel = 10;
 
-
+    public delegate void OnEnemyKilled();
+    public static event OnEnemyKilled onEnemyKilled;
 
     //Other variables
     public GameObject damageTextPrefab;
@@ -180,6 +181,10 @@ public class CharacterCombat : MonoBehaviour
 
         if(targetEnemy != null && targetEnemy.EnemyHP <= 0)
         {
+            if(onEnemyKilled != null)
+            {
+                onEnemyKilled();
+            }
             targetEnemy = null;
             isInCombat = false;
         }

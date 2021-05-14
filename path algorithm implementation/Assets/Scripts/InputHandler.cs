@@ -11,6 +11,8 @@ public class InputHandler : MonoBehaviour
     Outline outline;
     ObjectMover objectMover;
 
+    public Texture2D noActionCursor;
+
 
     private bool movingTowardsTarget = false;
 
@@ -20,6 +22,8 @@ public class InputHandler : MonoBehaviour
     private GameObject interactableObject;
 
     private DialogueManager dialogueManager;
+
+    private Animator characterAnimator;
 
     GraphicRaycaster raycaster;
 
@@ -35,7 +39,7 @@ public class InputHandler : MonoBehaviour
         raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
 
         dialogueManager = GameObject.Find("DialogueManager").gameObject.GetComponent<DialogueManager>();
-        
+        characterAnimator = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -43,26 +47,33 @@ public class InputHandler : MonoBehaviour
     {
         interactableObject = GetInterActableObject(); //we get every frame because we need to check if mouse is over an interactable object
 
+
         if(interactableObject != null && interactableObject.TryGetComponent(out IInteractable thing)) //the TryGetComponent is used to check if the interactable has implemented the nessesary functions for interactions.
         {
             thing.onMouseOver();
         }
+        else if(interactableObject != null){
+            //on ground
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
         else
         {
-            //Hovering over ground
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            //on nothing
+            Cursor.SetCursor(noActionCursor, Vector2.zero, CursorMode.ForceSoftware);
         }
 
         if (Input.GetMouseButtonDown(0))
         {
-            if(interactableObject == null) //Mouse on ground
+            characterAnimator.SetBool("isWoodCutting", false);
+            if (interactableObject != null && interactableObject.name.Equals("Terrain")) //Mouse on ground
             {
+                
                 dialogueManager.endDialogue();
                 pathfinder.findPath(GetMouseClickWorldPosition(), false);
                 movingTowardsTarget = false;
                 targetObject = null;
             }
-            else //Mouse on interactable item
+            else if(interactableObject != null) //Mouse on interactable item
             {
                 targetObject = interactableObject;
                 pathfinder.findPath(targetObject.transform.position, true);
@@ -142,6 +153,15 @@ public class InputHandler : MonoBehaviour
         //First we check if we are on a ui object:
         gameObject = getUIObject();
 
+        if (gameObject != null)
+        {
+            if (gameObject.name == "QuestList" || gameObject.name == "Scroll") //we want to be able to click through the quest list.
+            {
+                gameObject = null;
+            }
+        }
+        
+
         //if no hits, we then check for objects in the world:
         if (gameObject == null)
         {
@@ -157,9 +177,22 @@ public class InputHandler : MonoBehaviour
             }
         }
 
+        //if no hits, we then check for ground:
+        if (gameObject == null)
+        {
+            LayerMask interactableMask = LayerMask.GetMask("Ground");
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 1000f, interactableMask))
+            {
+                gameObject = hit.collider.gameObject;
+
+            }
+        }
+
         return gameObject;
     }
-    
-
 
 }

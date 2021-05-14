@@ -1,19 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ScriptableObjects.Items.Scripts;
 
 public class NPCbehavior : Actor
 {
-
-    [SerializeField] private Texture2D cursorImage;
+    public ItemObject Reward;
+    protected ItemObject reward; //workaround for protection
 
     DialogueTrigger dialogueTrigger;
-
+    QuestManager questManager;
+    
+    protected Quest quest;
 
     protected override void Start()
     {
         base.Start();
         dialogueTrigger = GetComponent<DialogueTrigger>();
+        questManager = playerCharacter.GetComponent<QuestManager>();
+        reward = Reward;
     }
 
     protected override void Update()
@@ -37,6 +42,7 @@ public class NPCbehavior : Actor
     protected override void onEndInteraction()
     {
         base.onEndInteraction();
+        questManager.addToQuestList(quest);
     }
 
     public void endInteraction() //used as a workaround to the fact that onEndInteraction is protected.
@@ -47,7 +53,7 @@ public class NPCbehavior : Actor
     protected override void LateUpdate()
     {
         base.LateUpdate();
-        if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
+        //if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
     }
 
 }

@@ -17,8 +17,7 @@ public class EnemyBehavior : Actor
     public int attackPower;
     public int defencePower;
     
-    [SerializeField] private Texture2D cursorImage;
-
+    
     public GameObject damageTextPrefab;
     private GameObject damageTextPositionObject;
 
@@ -106,7 +105,7 @@ public class EnemyBehavior : Actor
     protected override void LateUpdate()
     {
         base.LateUpdate();
-        if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
+        //if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
     }
 
     protected override void Update()
