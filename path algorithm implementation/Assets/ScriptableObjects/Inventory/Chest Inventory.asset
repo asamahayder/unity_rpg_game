@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b27b1f698f697ec9091b230adeb92ea0, type: 3}
   m_Name: Chest Inventory
   m_EditorClassIdentifier: 
-  databaseSaveDir: 
-  db: {fileID: 0}
+  databaseSaveDir: /Chest.Save
+  db: {fileID: 11400000, guid: ab0dc4d93d47270409d7f36f2f755923, type: 2}
   inventory:
     inventoryItemList:
     - parent: {fileID: 0}
@@ -32,151 +32,11 @@ MonoBehaviour:
       itemAmount: 0
     - parent: {fileID: 0}
       equipmentTypes: 
-      itemID: -1
+      itemID: 5
       item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
+        itemID: 5
+        itemName: Pizza
+      itemAmount: 1
     - parent: {fileID: 0}
       equipmentTypes: 
       itemID: -1
