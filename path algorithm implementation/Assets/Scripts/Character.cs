@@ -7,6 +7,10 @@ public class Character : MonoBehaviour
     public readonly MouseDragger _mouseDragger = new MouseDragger();
     public InventoryObject inventory;
     public InventoryObject equipment;
+    
+    private TreeBehavior treeBehavior;
+    public delegate void OnLogGathered();
+    public static event OnLogGathered onLogGathered;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -34,10 +38,26 @@ public class Character : MonoBehaviour
             inventory.LoadDatabase();
         }
     }
-    
+
+    private void Start()
+    {
+        treeBehavior = GameObject.Find("Tree").GetComponent<TreeBehavior>();
+    }
+
     private void OnApplicationQuit()
     {
         inventory.inventory.Clear();
         equipment.inventory.Clear();
+    }
+
+    public void collectLogs()
+    {
+        inventory.AddItemToInventorySlot(treeBehavior.logs, 1);
+
+        if (onLogGathered != null)
+        {
+            onLogGathered();
+        }
+
     }
 }

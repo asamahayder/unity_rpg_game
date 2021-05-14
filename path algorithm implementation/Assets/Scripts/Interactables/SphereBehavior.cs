@@ -5,7 +5,6 @@ using UnityEngine;
 public class SphereBehavior : Interactable
 {
 
-    [SerializeField] private Texture2D cursorImage;
 
     protected override void onInteract()
     {
@@ -20,7 +19,7 @@ public class SphereBehavior : Interactable
     protected override void LateUpdate()
     {
         base.LateUpdate();
-        if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
+       
     }
 
 }
