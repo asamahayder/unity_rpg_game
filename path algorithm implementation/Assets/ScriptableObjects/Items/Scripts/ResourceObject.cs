@@ -9,6 +9,8 @@ namespace ScriptableObjects.Items.Scripts
         Mining,
         Fishing
     }
+
+    // Resource item. Child of itemObject
     [CreateAssetMenu(fileName = "New Resource Object", menuName = "Inventory System/Items/Resource")]
     public class ResourceObject : ItemObject
     {

@@ -10,6 +10,8 @@ namespace ScriptableObjects.Items.Scripts
         Resource, 
         Miscellaneous
     }
+
+    // Parent class for all items. Contains general details that most items contain
     public abstract class ItemObject : ScriptableObject
     {
         public int itemID;

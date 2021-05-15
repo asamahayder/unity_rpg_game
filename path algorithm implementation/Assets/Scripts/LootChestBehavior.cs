@@ -4,12 +4,15 @@ using ScriptableObjects.Inventory.Scripts;
 using ScriptableObjects.Items.Scripts;
 using UnityEngine;
 
+// Handles what happens when trying to interact with a dropped chest from an enemy. Implements the Interactable interface.
 public class LootChestBehavior : Interactable
 {
     public GameObject chestScreenPrefab;
-    public InventoryObject chestInventory;
+    public DisplayScreenContainer chestContainer;
     private GameObject newChestScreen;
     private bool chestOpened = false;
+
+    // Implemented method that defines what happens when interacting with the chest
     protected override void onInteract()
     {
         chestOpened = true;
@@ -18,18 +21,20 @@ public class LootChestBehavior : Interactable
         newChestScreen.transform.SetParent(GameObject.FindGameObjectWithTag("UI Canvas").transform, false);
     }
 
+    // Adds randomized items to the chest from the database
     private void AddItemsToChest()
     {
         var amountOfLoot = RandomRange(1, 8);
         for (var i = 0; i < amountOfLoot; i++)
         {
-            var itemIdInChest = RandomRange(0, chestInventory.db.items.Length);
-            var itemObject = chestInventory.db.GetItem[itemIdInChest];
-            chestInventory.AddItemToInventorySlot(itemObject, itemObject.itemAmount);
+            var itemIdInChest = RandomRange(0, chestContainer.db.itemObjects.Length);
+            var itemObject = chestContainer.db.GetItem[itemIdInChest];
+            chestContainer.AddItemToInventorySlot(itemObject, itemObject.itemAmount);
         }
         
     }
 
+    // Helper function to randomize how many itmes to get from the chest as well as which items
     private int RandomRange(int start, int end)
     {
         return Random.Range(start, end);
@@ -38,10 +43,11 @@ public class LootChestBehavior : Interactable
     protected override void Start()
     {
         base.Start();
-        chestInventory.inventory.Clear();
+        chestContainer.inventory.Clear();
         AddItemsToChest();
     }
 
+    // Destroys the chest after a certain amount of time
     protected override void Update()
     {
         base.Update();

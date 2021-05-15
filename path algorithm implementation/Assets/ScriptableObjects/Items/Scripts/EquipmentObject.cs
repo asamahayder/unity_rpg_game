@@ -11,6 +11,8 @@ namespace ScriptableObjects.Items.Scripts
         Shield,
         Legs
     }
+
+    // Equipment item. Child of itemObject
     [CreateAssetMenu(fileName = "New Equipment Object", menuName = "Inventory System/Items/Equipment")]
     public class EquipmentObject : ItemObject
     {

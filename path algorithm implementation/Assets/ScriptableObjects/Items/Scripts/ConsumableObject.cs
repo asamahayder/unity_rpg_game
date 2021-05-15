@@ -9,6 +9,8 @@ namespace ScriptableObjects.Items.Scripts
         StatsRestore,
         StatsBoost
     }
+
+    // Consumable item. Child of itemObject
     [CreateAssetMenu(fileName = "New Consumable Object", menuName = "Inventory System/Items/Consumable")]
     public class ConsumableObject : ItemObject
     {

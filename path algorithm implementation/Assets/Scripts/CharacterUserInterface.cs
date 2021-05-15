@@ -7,15 +7,16 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+// Main user interface for most of the interactable UI elements of the character
 public abstract class CharacterUserInterface : MonoBehaviour
 {
     public Character character;
-    public InventoryObject inventoryObject;
-    protected Dictionary<GameObject, InventorySlot> displayedItems = new Dictionary<GameObject, InventorySlot>();
+    public DisplayScreenContainer displayScreenContainer;
+    protected Dictionary<GameObject, DisplaySlot> displayedItems = new Dictionary<GameObject, DisplaySlot>();
     
     void Start()
     {
-        foreach (var slot in inventoryObject.inventory.inventoryItemList)
+        foreach (var slot in displayScreenContainer.inventory.itemList)
         {
             slot.parent = this;
         }
@@ -31,8 +32,6 @@ public abstract class CharacterUserInterface : MonoBehaviour
 
     // Visualizes the GUI for the inventory. If there is an item in a slot, loads the sprite of that item and its text field
     // if there isn't, the default transparent sprite is loaded instead
-    // TODO this is an expensive method at the moment because it's getting called every frame
-    // TODO should definitely separate the getting of components into another list of components and then looking it up with this method 
     private void UpdateDisplay()
     {
         foreach (var slot in displayedItems)
@@ -41,7 +40,7 @@ public abstract class CharacterUserInterface : MonoBehaviour
             var slotTextObject = slot.Key.GetComponentInChildren<TextMeshProUGUI>();
             if (slot.Value.itemID >= 0)
             {
-                slotImageObject.sprite = inventoryObject.db.GetItem[slot.Value.item.itemID].itemSprite;
+                slotImageObject.sprite = displayScreenContainer.db.GetItem[slot.Value.item.itemID].itemSprite;
                 slotImageObject.color = new Color(1, 1, 1, 1);
                 slotTextObject.text = slot.Value.itemAmount == 1 ? "" : slot.Value.itemAmount.ToString("n0");
             }
@@ -65,16 +64,17 @@ public abstract class CharacterUserInterface : MonoBehaviour
         trigger.triggers.Add(eventTrigger);
     }
 
+    // When the mouse left clicks a displaySlot, add the item to the inventory and update the display it was in previously
     protected void OnPointerClick(GameObject obj)
     {
         var itemSlot = displayedItems[obj];
         if (itemSlot.item is null || itemSlot.item.itemID < 0) return;
-        var itemObject = inventoryObject.db.GetItem[itemSlot.item.itemID];
+        var itemObject = displayScreenContainer.db.GetItem[itemSlot.item.itemID];
         GameObject.Find("Character").GetComponent<Character>().inventory.AddItemToInventorySlot(itemObject,itemObject.itemAmount);
-        inventoryObject.RemoveItem(displayedItems[obj].item);
+        displayScreenContainer.RemoveItem(displayedItems[obj].item);
     }
 
-    // Checks what object we're hovering over. IF it's another object than the first one we started dragging, we update the mousedragger object
+    // Checks what object we're hovering over. IF it's another object than the first one we started dragging, we update the mousepointer object
     protected void OnPointerEnter(GameObject obj)
     {
         character.mousePointerObject.objUnderDragged = obj;
@@ -101,7 +101,7 @@ public abstract class CharacterUserInterface : MonoBehaviour
         if (displayedItems[obj].itemID >= 0)
         {
             var newObjImage = mouseObject.AddComponent<Image>();
-            newObjImage.sprite = inventoryObject.db.GetItem[displayedItems[obj].itemID].itemSprite;
+            newObjImage.sprite = displayScreenContainer.db.GetItem[displayedItems[obj].itemID].itemSprite;
             // makes it so that the image doesn't overlap the mouse cursor
             newObjImage.raycastTarget = false;
         }
@@ -116,14 +116,14 @@ public abstract class CharacterUserInterface : MonoBehaviour
         var itemDragged = character.mousePointerObject.itemDragged;
         var itemUnderDragged = character.mousePointerObject.itemUnderDragged;
         var objUnderDragged = character.mousePointerObject.objUnderDragged;
-        var getItem = inventoryObject.db.GetItem;
+        var getItem = displayScreenContainer.db.GetItem;
         if (objUnderDragged)
         {
             if (itemUnderDragged.item.itemID <= -1 && itemDragged.item.itemID <= -1) return;
             if (checkIfValidPlacement(itemUnderDragged, getItem, obj))
             {
                 UpdateEquipmentStats(itemDragged, itemUnderDragged, getItem);
-                InventoryObject.MoveItem(displayedItems[obj], itemUnderDragged.parent.displayedItems[objUnderDragged]);
+                DisplayScreenContainer.MoveItem(displayedItems[obj], itemUnderDragged.parent.displayedItems[objUnderDragged]);
             }
 
         }
@@ -131,15 +131,18 @@ public abstract class CharacterUserInterface : MonoBehaviour
         character.mousePointerObject.itemDragged = null;
     }
 
-    private bool checkIfValidPlacement(InventorySlot itemHoveringOver, Dictionary<int, ItemObject> getItem, GameObject obj)
+    // Helper method to check if the slot is a valid placement for the new item.
+    // Checks if there is an item there or not and what to do depending on that information
+    private bool checkIfValidPlacement(DisplaySlot itemHoveringOver, Dictionary<int, ItemObject> getItem, GameObject obj)
     {
-        return itemHoveringOver.isValidSlotPlacement(inventoryObject.db.GetItem[displayedItems[obj].itemID])
+        return itemHoveringOver.isValidSlotPlacement(displayScreenContainer.db.GetItem[displayedItems[obj].itemID])
                && (itemHoveringOver.item.itemID <= -1
                    || (itemHoveringOver.item.itemID >= 0 &&
                        displayedItems[obj].isValidSlotPlacement(getItem[itemHoveringOver.item.itemID])));
     }
 
-    private void UpdateEquipmentStats(InventorySlot itemDragged, InventorySlot itemHoveringOver, Dictionary<int, ItemObject> getItem)
+    // If an item is being dragged to or from a equipment slot, the equipment stats need to be calculated
+    private void UpdateEquipmentStats(DisplaySlot itemDragged, DisplaySlot itemHoveringOver, Dictionary<int, ItemObject> getItem)
     {
         var characterCombat = GameObject.Find("Character").GetComponent<Character>().gameObject.GetComponentInChildren<CharacterCombat>();
         var stats = new int[2];
@@ -210,7 +213,7 @@ public class MousePointer
 {
     public GameObject objDragged;
     public GameObject objUnderDragged;
-    public InventorySlot itemDragged;
-    public InventorySlot itemUnderDragged;
+    public DisplaySlot itemDragged;
+    public DisplaySlot itemUnderDragged;
     
 }

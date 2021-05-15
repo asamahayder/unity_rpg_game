@@ -4,8 +4,8 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public readonly MousePointer mousePointerObject = new MousePointer();
-    public InventoryObject inventory;
-    public InventoryObject equipment;
+    public DisplayScreenContainer inventory;
+    public DisplayScreenContainer equipment;
     
     private TreeBehavior treeBehavior;
     public delegate void OnLogGathered();

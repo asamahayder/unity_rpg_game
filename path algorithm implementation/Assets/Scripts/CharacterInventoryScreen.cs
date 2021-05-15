@@ -17,7 +17,7 @@ public class CharacterInventoryScreen : CharacterUserInterface
     protected override void CreateInventorySlots()
     {
         displayedItems = new Dictionary<GameObject, InventorySlot>();
-        var inventorySlots = inventoryObject.inventory.inventoryItemList;
+        var inventorySlots = displayScreenContainer.inventory.inventoryItemList;
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InstantiateInventorySlot(inventorySlots, i);
