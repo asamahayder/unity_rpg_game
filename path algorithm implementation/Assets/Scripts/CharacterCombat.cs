@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Image = UnityEngine.UI.Image;
@@ -77,7 +75,6 @@ public class CharacterCombat : MonoBehaviour
         {
             attackPowerBonus = value;
             attackPower = attackPowerBonus + combatLevel * attackPowerGainOnNewLevel;
-            print("HEEEEEEEEY!!!!!!!!!!!!!!!!!!!");
         }
         get
         {
@@ -99,14 +96,10 @@ public class CharacterCombat : MonoBehaviour
 
                 if (damage < 0) damage = 0; //otherwise, if defencePower becomes too strong, you will gain health when getting damage.
 
-                print("damage before defencePower: " + baseDamage);
-                print("defencePowerBonus: " + defencePowerBonus);
-
                 GameObject damageText = Instantiate(damageTextPrefab, damageTextPositionObject.transform);
 
                 damageText.transform.GetChild(0).GetComponent<TextMeshPro>().SetText("-" + damage);
                 currentCharacterHP -= damage;
-                print("Character health: " + currentCharacterHP);
             }
             else //gained health
             {
@@ -143,7 +136,6 @@ public class CharacterCombat : MonoBehaviour
 
     public int[] UpdateCombatBonuses(int attackBonus, int defenceBonus)
     {
-        print("UPDATING POWEEEEEEEEER WITH: " + attackBonus);
         defencePower += defenceBonus;
         AttackPowerBonus += attackBonus;
         defencePowerBonus += defenceBonus;
@@ -198,13 +190,10 @@ public class CharacterCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print("ATTACK POWEEEEEEER: " + attackPower);
-
         if(currentCharacterHP <= 0f && !isDead)
         {
             isDead = true;
             isInCombat = false;
-            print("character is DEAD!");
         }
 
         if(targetEnemy != null && targetEnemy.EnemyHP <= 0)
@@ -221,17 +210,13 @@ public class CharacterCombat : MonoBehaviour
 
 
 
-    //this method is called from the CharacterAnimationEvents class. Is called at a certain point in the attack animation.
+    //This method is called from the CharacterAnimationEvents class. Is called at a certain point in the attack animation.
     public void attack()
     {
         if (targetEnemy != null)
         {
             if(!(targetEnemy.EnemyHP <= 0)) targetEnemy.EnemyHP -= Random.Range(0,attackPower);
-            else
-            {
-                
-            }
-
         }
     }
+
 }

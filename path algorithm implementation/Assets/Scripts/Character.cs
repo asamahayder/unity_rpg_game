@@ -1,5 +1,4 @@
 using ScriptableObjects.Inventory.Scripts;
-using ScriptableObjects.Items.Scripts;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -15,7 +14,6 @@ public class Character : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         var groundItem = other.GetComponent<GroundItem>();
-        //Debug.Log(item);
         Debug.Log(groundItem.itemObject.itemName);
         if (!groundItem) return;
         if (inventory.AddItemToInventorySlot(groundItem.itemObject, groundItem.itemObject.itemAmount))

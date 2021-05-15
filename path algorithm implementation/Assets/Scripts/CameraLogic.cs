@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraLogic : MonoBehaviour
@@ -72,10 +69,9 @@ public class CameraLogic : MonoBehaviour
 
         transform.position = Vector3.Slerp(transform.position, newPos, smoothFactor);
 
-
         //Handling camera look-at player logic. Also adding some height so camera looks at head instead of feet.
         transform.LookAt(target.transform.Find("Camera Lookat"));
-
-
     }
+
+
 }

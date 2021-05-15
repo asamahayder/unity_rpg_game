@@ -1,11 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
+//This class is inspired by the following tutorial series: https://www.youtube.com/playlist?list=PLFt_AvWsXl0cq5Umv3pMC9SPnKjfp9eGW
+
 public class Grid : MonoBehaviour
 {
-
     public bool onlyDisplayPathGizmos;
 
     public LayerMask unwalkableMask;
@@ -15,9 +17,6 @@ public class Grid : MonoBehaviour
 
     float nodeDiameter;
     int gridSizeX, gridSizeY;
-
-    //public Transform player;
-
 
 
     public List<Node> path;
@@ -65,12 +64,6 @@ public class Grid : MonoBehaviour
         CreateGrid();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    
-    }
-
     public int MaxSize
     {
         get
@@ -101,9 +94,6 @@ public class Grid : MonoBehaviour
         float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
         float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
 
-        //percentX = Mathf.Clamp01(percentX); //makes sure that our percentage value is always between 0 and 1. (like in case the character is outside the map)
-        //percentY = Mathf.Clamp01(percentY);
-
         if(percentX > 1 || percentX < 0 || percentY > 1 || percentY < 0)
         {
             return new Node(false, new Vector3(0, 0, 0), 0, 0);
@@ -113,7 +103,6 @@ public class Grid : MonoBehaviour
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
 
         return grid[x, y];
-
     }
 
     public List<Node> getNeighbors(Node node)
@@ -139,10 +128,5 @@ public class Grid : MonoBehaviour
 
         return neighbors;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

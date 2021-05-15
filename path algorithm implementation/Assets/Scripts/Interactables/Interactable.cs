@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour, IInteractable
@@ -29,7 +28,6 @@ public abstract class Interactable : MonoBehaviour, IInteractable
         outline.OutlineColor = outlineColor;
         outline.OutlineWidth = outlineWidth;
         outline.OutlineMode = outlineMode;
-        //outline.enabled = false;
         StartCoroutine(resetMouseOver());
     }
 
@@ -92,10 +90,6 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     {
         infoUI = gameObject.transform.Find("GeneralInfo").gameObject;
         infoUI.transform.Find("NameText").GetComponent<TMPro.TextMeshProUGUI>().SetText(name);
-
-        
-
     }
-
 
 }

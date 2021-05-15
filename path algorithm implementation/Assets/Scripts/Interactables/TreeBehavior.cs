@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ScriptableObjects.Items.Scripts;
 
 public class TreeBehavior : Interactable
 {
-
     Animator characterAnimator;
     [SerializeField] public ItemObject logs;
 

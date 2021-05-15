@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,7 +41,7 @@ public class ObjectMover : MonoBehaviour
     void Update()
     {
 
-        //Looking for movement by comparing last frame's position with this frame's position.
+        //Checking for movement by comparing last frame's position with this frame's position.
         //Using movement to control running animation state and rotation of character.
         newPosition = gameObject.transform.position;
 

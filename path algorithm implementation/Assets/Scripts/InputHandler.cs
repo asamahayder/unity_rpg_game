@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class InputHandler : MonoBehaviour
 {
-
     PathFinding pathfinder;
     Outline outline;
     ObjectMover objectMover;
@@ -87,15 +86,10 @@ public class InputHandler : MonoBehaviour
             Application.Quit();
         }
 
-
-        //The reason i don't just use the targetObject instead of also using the movingTowardsTarget bool, is to avoid activating an objects interact method every frame.
-        //By using a bool, i can toggle it off idependently of the object. In other words, without having the bool, i would need to set the target to null which wont let me use its onInteract method.
-        //ACTUALLY  now i think about it, i might be able to remove the bool. Because i can just check:
-        //if target != null && distance < minimumDistance => target.onInteract; target ? null.
-        //TODO: maybe implement the above. It is slightly more clean.
+       
         if (targetObject != null)
         {
-            if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) <= minimumDistanceToTarget && targetObject.TryGetComponent(out IInteractable thing2)) //thing is already taken apparently
+            if (movingTowardsTarget && Vector3.Distance(transform.position, targetObject.transform.position) <= minimumDistanceToTarget && targetObject.TryGetComponent(out IInteractable thing2))
             {
                 movingTowardsTarget = false;
                 thing2.onInteract();
@@ -181,7 +175,6 @@ public class InputHandler : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 1000f, interactableMask))
             {
                 gameObject = hit.collider.gameObject;
-
             }
         }
 

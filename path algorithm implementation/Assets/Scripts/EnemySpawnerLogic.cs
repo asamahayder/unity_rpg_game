@@ -50,12 +50,6 @@ public class EnemySpawnerLogic : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void spawnEnemy()
     {
         if (currentEnemyCount < maxEnemyCount)

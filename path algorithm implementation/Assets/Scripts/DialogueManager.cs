@@ -21,17 +21,10 @@ public class DialogueManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         dialogueBoxAnimator = GameObject.Find("Canvas").transform.Find("DialogueBox").gameObject.GetComponent<Animator>();
-
         sentences = new Queue<string>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void startDialogue(Dialogue dialogue, GameObject gameObject)
     {
@@ -85,7 +78,6 @@ public class DialogueManager : MonoBehaviour
             return;
         }
             
-        print("end dialogue");
         dialogueBoxAnimator.SetBool("isActive", false);
 
         if(currentNPC != null)

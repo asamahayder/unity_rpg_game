@@ -8,7 +8,7 @@ public class Actor : Interactable
     protected GameObject playerCharacter;
     protected PathFinding pathfinder;
     protected ObjectMover objectMover;
-    protected bool isInteracting = false; //used to indicate wether that the actor is currently talking or fighting with someone, or just chilling.
+    protected bool isInteracting = false; //used to indicate wether that the actor is currently talking or fighting with someone or not.
     protected Animator animator;
 
     protected override void onInteract()
@@ -37,11 +37,6 @@ public class Actor : Interactable
     protected override void LateUpdate()
     {
         base.LateUpdate();
-        if (isInteracting)
-        {
-            
-        }
-        
     }
 
     protected override void Awake()
@@ -67,7 +62,4 @@ public class Actor : Interactable
             showUI();
         }
     }
-
-
-   
 }

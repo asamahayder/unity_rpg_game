@@ -50,17 +50,6 @@ public class LootChestBehavior : Interactable
             chestOpened = false;
             Destroy(this.gameObject, 10);
         }
-        /*
-        if (chestOpened && !(newChestScreen is null))
-        {
-            var distance = Vector3.Distance(this.transform.position, transform.Find("mixamorig1:Hips/mixamorig1:LeftUpLeg/mixamorig1:LeftLeg/mixamorig1:LeftFoot").position);
-            if (distance > 100)
-            {
-                Destroy(newChestScreen);
-                chestOpened = false;
-            }
-        }
-        */
     }
 
     protected override void onMouseOver()

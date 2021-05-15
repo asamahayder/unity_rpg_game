@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CharacterAnimationEvents : MonoBehaviour
 {
-
-
     CharacterCombat characterCombat;
     Character character;
 
@@ -16,12 +14,8 @@ public class CharacterAnimationEvents : MonoBehaviour
         character = GetComponentInParent<Character>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
+    //The following two functions are called with animation events.
     void onAttack()
     {
         characterCombat.attack();

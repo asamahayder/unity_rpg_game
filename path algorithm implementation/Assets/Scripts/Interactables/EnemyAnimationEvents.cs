@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyAnimationEvents : MonoBehaviour
@@ -11,12 +9,6 @@ public class EnemyAnimationEvents : MonoBehaviour
     void Start()
     {
         enemyBehavior = GetComponent<EnemyBehavior>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void onAttack()

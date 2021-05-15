@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 
+//This class is inspired by the following tutorial series: https://www.youtube.com/playlist?list=PLFt_AvWsXl0cq5Umv3pMC9SPnKjfp9eGW
 public class PathFinding : MonoBehaviour
 {
 
@@ -18,8 +19,8 @@ public class PathFinding : MonoBehaviour
     ObjectMover mover;
 
     //For roaming and npc
-    public bool isNPC = false; //Maybe let this be controlles by NPC behavior instead of public?
-    public bool activateRoam = false; //this only controlls the initial roam behavior. //Maybe move this to NPCBehavior?
+    public bool isNPC = false; 
+    public bool activateRoam = false; //this only controlls the initial roam behavior. 
     public Vector3 startPosition;
     public float roamingRadius = 10f;
     public float z1,z2,x1,x2;
@@ -35,8 +36,6 @@ public class PathFinding : MonoBehaviour
         grid = gridObject.GetComponent<Grid>();
 
         mover = GetComponent<ObjectMover>();
-
-
     }
 
     private void Start()
@@ -52,11 +51,6 @@ public class PathFinding : MonoBehaviour
         x2 = startPosition.x + roamingRadius;
 
         if (activateRoam && isNPC) StartCoroutine(roamRutine); //roaming only possible for npc's
-    }
-
-    private void Update()
-    {
-
     }
 
     
@@ -85,8 +79,6 @@ public class PathFinding : MonoBehaviour
             if (node == targetNode) //we have found destination
             {
                 sw.Stop();
-                //print("Path found: " + sw.ElapsedMilliseconds + " ms");
-
 
                 if (currentWayPoint != null) Destroy(currentWayPoint);
                 if (!isNPC && !toInteractableObject) 

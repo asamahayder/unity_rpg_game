@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using ScriptableObjects.Items.Scripts;
 
 public class NPCbehavior : Actor
@@ -25,7 +22,6 @@ public class NPCbehavior : Actor
     protected override void Update()
     {
         base.Update();
-        print(pathfinder.numberOfRoutinesRunning);
     }
 
     protected override void onInteract()
@@ -37,7 +33,6 @@ public class NPCbehavior : Actor
     protected override void onMouseOver()
     {
         base.onMouseOver();
-        
     }
 
     protected override void onEndInteraction()
@@ -54,7 +49,6 @@ public class NPCbehavior : Actor
     protected override void LateUpdate()
     {
         base.LateUpdate();
-        //if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
     }
 
 }

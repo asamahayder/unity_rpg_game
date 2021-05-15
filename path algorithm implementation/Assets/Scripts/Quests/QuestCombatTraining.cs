@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using ScriptableObjects.Items.Scripts;
@@ -7,7 +5,6 @@ using ScriptableObjects.Items.Scripts;
 
 public class QuestCombatTraining : Quest
 {
-
     private int enemiesKilled;
     private int enemiesToKill;
     
@@ -46,7 +43,6 @@ public class QuestCombatTraining : Quest
 
         if(enemiesKilled == enemiesToKill)
         {
-            Debug.Log("Quest Finished!");
             endQuest();
         }
     }
@@ -60,10 +56,6 @@ public class QuestCombatTraining : Quest
     private void incrementKillCount()
     {
         enemiesKilled++;
-        if (!questFinished)
-        {
-            Debug.Log("Incrementing killcount. Left to kill: " + (enemiesToKill - enemiesKilled));
-        }
     }
 
     

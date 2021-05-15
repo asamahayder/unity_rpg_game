@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,15 +24,11 @@ public class QuestManager : MonoBehaviour
             {
                 Destroy(quest.getQuestUI());
             }
-
         }
     }
 
     public void addToQuestList(Quest quest)
     {
-
-        print("name of quest: " + quest.getQuestTitel());
-
         foreach (Quest q in questList)
         {
             if (quest.getQuestTitel().Equals(q.getQuestTitel()))
@@ -42,7 +37,6 @@ public class QuestManager : MonoBehaviour
             }
         }
 
-        print("Adding quest!");
         questList.Add(quest);
         GameObject questUI = Instantiate(questUIPrefab);
         questUI.transform.parent = scrollView.transform;

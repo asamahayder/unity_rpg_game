@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Image = UnityEngine.UI.Image;
@@ -27,12 +25,9 @@ public class EnemyBehavior : Actor
     private GameObject levelText;
     private GameObject nameText;
 
-    
-
     private bool isDead = false;
 
 
-    //TODO: the characterHP logic is copied inside this and CharacterCombat. Implement a better OOP way than this.
     public float EnemyHP
     {
         set
@@ -84,13 +79,11 @@ public class EnemyBehavior : Actor
         base.onInteract();
         IsinCombat = true; //important that this is before startCoroutine
         if (characterCombat.TargetEnemy == null) characterCombat.TargetEnemy = this;
-        else print("You are already fighting an enemy!");
     }
 
     protected override void onMouseOver()
     {
         base.onMouseOver();
-
     }
 
     protected override void Start()
@@ -105,7 +98,6 @@ public class EnemyBehavior : Actor
     protected override void LateUpdate()
     {
         base.LateUpdate();
-        //if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
     }
 
     protected override void Update()
@@ -123,7 +115,6 @@ public class EnemyBehavior : Actor
         if (!animator.GetBool("isDead") && isInCombat && Vector3.Distance(playerCharacter.transform.position, transform.position) > attackRange)
         {
             pathfinder.findPath(playerCharacter.transform.position, true);
-            
         }
 
 
@@ -146,7 +137,6 @@ public class EnemyBehavior : Actor
         base.onEndInteraction();
         IsinCombat = false;
         characterCombat.TargetEnemy = null;
-        
     }
 
     public void onDie()

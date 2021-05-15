@@ -53,8 +53,6 @@ public abstract class CharacterUserInterface : MonoBehaviour
             }
         }
 
-        //Debug.Log("ITEM BEING DRAGGED === " + character._mouseDragger.itemDragged.item.itemName);
-        //Debug.Log("ITEM BEING HOVERED OVER === " + character._mouseDragger.itemHoveringOver.item.itemName);
     }
 
     //Creates an eventTrigger for the button on the itemSlot
@@ -193,7 +191,6 @@ public abstract class CharacterUserInterface : MonoBehaviour
                 }
             }
         }
-        Debug.Log("ATTACK/DEFENSE POWER!!! : " + stats[0]+ " " + stats[1]);
     }
 
     // When dragging an item, the new dragged item object gets a copy of the sprite which was in the item slot and it 

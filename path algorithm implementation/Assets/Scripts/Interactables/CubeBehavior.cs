@@ -17,7 +17,6 @@ public class CubeBehavior : Interactable
     protected override void LateUpdate()
     {
         base.LateUpdate();
-        //if (isMouseOver) Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.ForceSoftware);
     }
 
 }

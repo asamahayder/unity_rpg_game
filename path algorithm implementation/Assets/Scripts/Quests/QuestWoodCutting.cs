@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using ScriptableObjects.Items.Scripts;
@@ -7,10 +5,8 @@ using ScriptableObjects.Items.Scripts;
 
 public class QuestWoodCutting : Quest
 {
-
     private int logsGathered;
     private int logsToGather;
-    
     
     public QuestWoodCutting(ItemObject reward) : base(reward)
     {
@@ -19,7 +15,6 @@ public class QuestWoodCutting : Quest
 
     protected override void Start()
     {
-        //questTitel = "WoodCutting Training";
         base.Start();
         questDescription = "Gather 5 logs";
         logsGathered = 0;
@@ -43,7 +38,6 @@ public class QuestWoodCutting : Quest
 
         if(logsGathered == logsToGather)
         {
-            Debug.Log("Quest Finished!");
             endQuest();
         }
     }
@@ -57,10 +51,6 @@ public class QuestWoodCutting : Quest
     private void incrementLogCount()
     {
         logsGathered++;
-        if (!questFinished)
-        {
-            Debug.Log("Incrementing LogCount. Left to gather: " + (logsToGather - logsGathered));
-        }
     }
 
     

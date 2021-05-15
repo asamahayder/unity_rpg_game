@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ScriptableObjects.Items.Scripts;
 
@@ -22,7 +20,6 @@ public abstract class Quest
     protected virtual void Start()
     {
         questFinished = false;
-        //questTitel = "";
         questDescription = "";
         questProgress = "";
     }
@@ -53,7 +50,6 @@ public abstract class Quest
     {
         questFinished = true;
         GameObject.Find("Character").GetComponent<Character>().inventory.AddItemToInventorySlot(reward,500);
-        
     }
 
     protected virtual void checkProgress()
@@ -68,7 +64,6 @@ public abstract class Quest
 
 
     //GETTERS
-
     public bool getQuestFinished()
     {
         return questFinished;

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This class is inspired by the following tutorial series: https://www.youtube.com/playlist?list=PLFt_AvWsXl0cq5Umv3pMC9SPnKjfp9eGW
+
 public class Heap<T> where T : IHeapItem<T>
 {
     T[] items;
