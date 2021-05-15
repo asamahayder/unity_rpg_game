@@ -9,41 +9,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b27b1f698f697ec9091b230adeb92ea0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a3a53f8bb96fe940991f7c70163c293, type: 3}
   m_Name: Chest Inventory
   m_EditorClassIdentifier: 
   databaseSaveDir: /Chest.Save
   db: {fileID: 11400000, guid: ab0dc4d93d47270409d7f36f2f755923, type: 2}
   inventory:
-    inventoryItemList:
+    itemList:
     - parent: {fileID: 0}
       equipmentTypes: 
-      itemID: -1
+      itemID: 3
       item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: -1
-      item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
-    - parent: {fileID: 0}
-      equipmentTypes: 
-      itemID: 5
-      item:
-        itemID: 5
-        itemName: Pizza
+        itemID: 3
+        itemName: Head Armor
       itemAmount: 1
     - parent: {fileID: 0}
       equipmentTypes: 
-      itemID: -1
+      itemID: 6
       item:
-        itemID: -1
-        itemName: 
-      itemAmount: 0
+        itemID: 6
+        itemName: Shield
+      itemAmount: 1
+    - parent: {fileID: 0}
+      equipmentTypes: 
+      itemID: 6
+      item:
+        itemID: 6
+        itemName: Shield
+      itemAmount: 1
+    - parent: {fileID: 0}
+      equipmentTypes: 
+      itemID: 7
+      item:
+        itemID: 7
+        itemName: Blue Sword
+      itemAmount: 1
     - parent: {fileID: 0}
       equipmentTypes: 
       itemID: -1

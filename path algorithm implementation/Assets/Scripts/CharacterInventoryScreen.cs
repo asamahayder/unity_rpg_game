@@ -16,8 +16,8 @@ public class CharacterInventoryScreen : CharacterUserInterface
     // Creates all the inventory slots for the inventory and instantiates them with a gameobject
     protected override void CreateInventorySlots()
     {
-        displayedItems = new Dictionary<GameObject, InventorySlot>();
-        var inventorySlots = displayScreenContainer.inventory.inventoryItemList;
+        displayedItems = new Dictionary<GameObject, DisplaySlot>();
+        var inventorySlots = displayScreenContainer.inventory.itemList;
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InstantiateInventorySlot(inventorySlots, i);
@@ -25,7 +25,7 @@ public class CharacterInventoryScreen : CharacterUserInterface
     }
         
     //Instantiates the itemslot with its default sprite (basically just an empty inventory first time around with a transparent background indicating the slots)
-    private void InstantiateInventorySlot(InventorySlot[] inventorySlots , int i)
+    private void InstantiateInventorySlot(DisplaySlot[] inventorySlots , int i)
     {
         GameObject obj = Instantiate(inventoryItemSlotPrefab, Vector3.zero,
             Quaternion.identity, transform);

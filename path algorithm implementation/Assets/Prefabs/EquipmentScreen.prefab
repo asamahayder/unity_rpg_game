@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 7886304007724382488, guid: 48dba8259185a9e469155d8f65fd6484, type: 3}
-  inventoryObject: {fileID: 11400000, guid: ddbc005092ffbd38d91d893e33fb73d3, type: 2}
+  displayScreenContainer: {fileID: 11400000, guid: ddbc005092ffbd38d91d893e33fb73d3, type: 2}
   equipmentSlots:
   - {fileID: 3224692281827409270}
   - {fileID: 3224692283099320729}

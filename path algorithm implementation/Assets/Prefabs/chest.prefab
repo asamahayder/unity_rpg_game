@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7656519884054523601}
   - component: {fileID: -8684931612860363217}
   m_Layer: 9
-  m_Name: treasure_chest_closed
+  m_Name: chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorImage: {fileID: 2800000, guid: f8c873f1e53e83f4aabf342d6be1dfc3, type: 3}
   chestScreenPrefab: {fileID: 6475074989438758637, guid: 18ef6e52653591a57899a9898df23a52, type: 3}
-  chestInventory: {fileID: 11400000, guid: 81aac2ce34ba70ee4b807f25a79ee6b3, type: 2}
+  chestContainer: {fileID: 11400000, guid: 81aac2ce34ba70ee4b807f25a79ee6b3, type: 2}
 --- !u!114 &7656519884054523601
 MonoBehaviour:
   m_ObjectHideFlags: 0
